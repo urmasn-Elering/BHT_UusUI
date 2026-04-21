@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8">
+<title>BHT Elekter — Valemid</title>
+<style>
+  :root {
+    --teal-900: #004b58;
+    --teal-800: #00606f;
+    --teal-700: #007B8F;
+    --teal-600: #0e8fa3;
+    --teal-100: #cfe6ea;
+    --teal-050: #e8f2f4;
+    --ink-900: #1e2a2e;
+    --ink-700: #3d4e55;
+    --ink-500: #6b7c83;
+    --ink-400: #8a9aa0;
+    --line: #d8dfe2;
+    --line-soft: #e9edef;
+    --bg: #ffffff;
+    --bg-zebra: #f6f8f9;
+    --bg-sidebar: #ffffff;
+    --green-600: #1f8a55;
+    --green-500: #2e9b61;
+    --green-050: #e9f6ee;
+    --amber-050: #fff6db;
+    --amber-500: #e0a81b;
+    --red-500: #c8394a;
+    --radius: 4px;
+    --radius-lg: 6px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --focus: 0 0 0 3px rgba(0,123,143,.2);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    font-size: 13px;
+    color: var(--ink-900);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  button { font-family: inherit; font-size: inherit; cursor: pointer; }
+  a { color: var(--teal-700); text-decoration: none; }
+
+  /* Icons */
+  .icon {
+    display: inline-block;
+    width: 16px; height: 16px;
+    vertical-align: middle;
+    stroke-width: 1.75;
+    stroke: currentColor;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .icon-sm { width: 14px; height: 14px; }
+  .icon-lg { width: 18px; height: 18px; }
+
+  /* ============ HEADER ============ */
+  .topbar {
+    height: 48px;
+    background: var(--teal-900);
+    color: #fff;
+    display: flex; align-items: center;
+    padding: 0 20px;
+    gap: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand svg { display: block; }
+  .brand-sub {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,.92);
+    font-weight: 400;
+  }
+  .topbar-right {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 22px;
+    font-size: 13px;
+  }
+  .topbar-right .item {
+    display: inline-flex; align-items: center; gap: 7px;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .topbar-right .item:hover { opacity: .85; }
+  .topbar-right .sep {
+    width: 1px; height: 20px; background: rgba(255,255,255,.2);
+  }
+
+  /* ============ LAYOUT ============ */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 48px);
+  }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar {
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--line);
+    padding: 18px 0;
+  }
+  .side-back {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 20px;
+    color: var(--ink-700);
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .side-back:hover { color: var(--teal-700); }
+  .side-item {
+    display: block;
+    padding: 9px 20px 9px 36px;
+    font-size: 13px;
+    color: var(--ink-700);
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  .side-item:hover { background: var(--teal-050); color: var(--teal-800); }
+  .side-item.active {
+    background: var(--teal-050);
+    color: var(--teal-800);
+    border-left-color: var(--teal-700);
+    font-weight: 600;
+  }
+
+  /* ============ MAIN ============ */
+  .main {
+    padding: 20px 24px 40px;
+    min-width: 0;
+  }
+
+  .page-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink-900);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .page-actions { display: flex; gap: 10px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 34px;
+    padding: 0 14px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-size: 13px; font-weight: 500;
+    transition: background .12s, border-color .12s, color .12s;
+    background: #fff;
+    color: var(--ink-900);
+  }
+  .btn:focus-visible { outline: none; box-shadow: var(--focus); }
+
+  .btn-primary {
+    background: var(--teal-700); color: #fff; border-color: var(--teal-700);
+  }
+  .btn-primary:hover { background: var(--teal-800); border-color: var(--teal-800); }
+
+  .btn-secondary {
+    background: #fff; color: var(--teal-700); border-color: var(--teal-700);
+  }
+  .btn-secondary:hover { background: var(--teal-050); }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex; align-items: center; gap: 16px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .field { display: flex; align-items: center; gap: 8px; }
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-700);
+    letter-spacing: 0.02em;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1 1 280px;
+    min-width: 220px;
+  }
+  .search-wrap .search-icon {
+    position: absolute; top: 50%; left: 10px; transform: translateY(-50%);
+    color: var(--ink-400); pointer-events: none;
+  }
+  .input, .select {
+    height: 34px;
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 12px;
+    font-size: 13px;
+    color: var(--ink-900);
+    background: #fff;
+    font-family: inherit;
+  }
+  .input:focus, .select:focus { outline: none; border-color: var(--teal-700); box-shadow: var(--focus); }
+  .search-wrap .input { padding-left: 34px; }
+
+  .select-wrap {
+    position: relative;
+    min-width: 180px;
+  }
+  .select-wrap .chev-icon {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--ink-500); pointer-events: none;
+  }
+  .select {
+    appearance: none; -webkit-appearance: none;
+    padding-right: 30px;
+    cursor: pointer;
+  }
+
+  /* Toggle */
+  .toggle-wrap {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .toggle {
+    position: relative;
+    width: 36px; height: 20px;
+    background: #c4cdd1;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    background: #fff; border-radius: 50%;
+    transition: left .15s;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  }
+  .toggle.on { background: var(--teal-700); }
+  .toggle.on::after { left: 18px; }
+  .toggle-wrap label { font-size: 13px; color: var(--ink-700); cursor: pointer; user-select: none; }
+
+  /* ============ TABLE ============ */
+  .table-wrap {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  thead th {
+    background: var(--teal-900);
+    color: #fff;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 11px 12px;
+    white-space: nowrap;
+    user-select: none;
+  }
+  thead th .sort {
+    display: inline-flex; vertical-align: middle;
+    margin-left: 6px;
+    color: rgba(255,255,255,.55);
+    cursor: pointer;
+  }
+  thead th .sort:hover { color: #fff; }
+  thead th.sorted .sort { color: #fff; }
+
+  tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--ink-900);
+    border-top: 1px solid var(--line-soft);
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(odd) td { background: var(--bg-zebra); }
+  tbody tr:hover td { background: var(--teal-050); }
+  tbody tr.expanded td { background: #fff !important; }
+
+  tbody tr.child-row td {
+    background: #fff !important;
+    color: var(--ink-500);
+    font-size: 12.5px;
+    padding: 7px 12px;
+    border-top: 1px dashed var(--line-soft);
+  }
+  tbody tr.child-row td:nth-child(2) { padding-left: 48px; }
+  tbody tr.child-row.active td {
+    color: var(--green-600);
+    font-weight: 600;
+  }
+  tbody tr.child-row:hover td { background: #f3faf6 !important; }
+
+  tbody tr.row-warn td { background: var(--amber-050) !important; }
+  tbody tr.row-warn:hover td { background: #fff1c4 !important; }
+
+  .row-index {
+    color: var(--ink-400);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+  }
+
+  .expand-btn {
+    background: none; border: none; padding: 0;
+    width: 20px; height: 20px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink-700);
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .expand-btn:hover { color: var(--teal-700); }
+  .expand-btn .icon { transition: transform .15s; }
+  tr.expanded .expand-btn .icon { transform: rotate(90deg); }
+
+  .code-cell {
+    font-family: "JetBrains Mono", "Menlo", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--ink-900);
+    font-weight: 500;
+  }
+  .code-wrap {
+    display: inline-flex; align-items: center; gap: 4px;
+    vertical-align: middle;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 500;
+    background: var(--teal-050);
+    color: var(--teal-800);
+    border: 1px solid var(--teal-100);
+  }
+
+  /* Actions */
+  .row-actions {
+    display: flex; align-items: center; gap: 4px;
+    justify-content: flex-end;
+  }
+  .icon-btn {
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: 1px solid transparent;
+    border-radius: var(--radius);
+    color: var(--ink-500);
+    transition: color .12s, background .12s, border-color .12s;
+    padding: 0;
+  }
+  .icon-btn:hover { color: var(--teal-700); background: var(--teal-050); }
+  .icon-btn.danger:hover { color: var(--red-500); background: #fcecee; }
+
+  .log-btn {
+    height: 26px;
+    padding: 0 10px;
+    border-radius: var(--radius);
+    background: var(--teal-700);
+    color: #fff;
+    border: 1px solid var(--teal-700);
+    font-size: 11.5px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .log-btn:hover { background: var(--teal-800); }
+
+  .add-formula-btn {
+    height: 26px;
+    padding: 0 10px;
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--teal-700);
+    border: 1px solid var(--teal-700);
+    font-size: 11.5px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+    white-space: nowrap;
+  }
+  .add-formula-btn:hover { background: var(--teal-050); }
+
+  /* Footer pagination */
+  .table-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px;
+    border-top: 1px solid var(--line-soft);
+    background: #fff;
+    font-size: 12.5px;
+    color: var(--ink-500);
+  }
+  .pagination { display: flex; align-items: center; gap: 4px; }
+  .page-btn {
+    min-width: 28px; height: 28px;
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: var(--radius);
+    color: var(--ink-700);
+    font-size: 12.5px;
+    padding: 0 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .page-btn:hover:not(:disabled):not(.active) { background: var(--teal-050); border-color: var(--teal-700); color: var(--teal-700); }
+  .page-btn.active { background: var(--teal-700); border-color: var(--teal-700); color: #fff; }
+  .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--teal-700);
+    padding: 12px 16px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    display: none;
+    font-size: 13px;
+    gap: 10px; align-items: center;
+    z-index: 100;
+    max-width: 340px;
+  }
+  .toast.show { display: flex; animation: slideIn .25s ease; }
+  .toast .icon { color: var(--teal-700); }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .inline-desc { color: var(--ink-500); font-size: 12.5px; }
+
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 180px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SVG SPRITE ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6l6 -6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M9 12h12l-3 -3"/><path d="M18 15l3 -3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 9l5 -5l5 5"/><path d="M12 4v12"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6 -6"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 24 24"><path d="M3 9l4 -4l4 4M7 5v14"/><path d="M21 15l-4 4l-4 -4M17 19v-14"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M13 5h8M13 9h5M13 15h8M13 19h5"/><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="3" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="brand">
+    <svg width="85" height="24" viewBox="0 0 85 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M61.7941 6.05561C60.6475 6.05561 58.8864 6.31963 57.1385 7.48577C56.881 6.97176 56.0261 6.34921 55.1618 6.05165C54.9728 5.98671 54.767 6.07146 54.6695 6.2486L53.9407 7.60406C53.83 7.81077 53.9026 8.06503 54.1011 8.18515C54.557 8.45314 55.0245 8.6324 55.0245 9.54032V21.299C55.0245 21.5353 55.2058 21.7264 55.4385 21.7264H57.1902C57.4152 21.7264 57.6003 21.5334 57.6003 21.299C57.6003 21.299 57.5983 11.5144 57.6003 10.0053C58.9493 8.81929 60.5214 8.55344 61.5901 8.55344C62.4447 8.55344 63.2653 8.79582 63.664 9.34337C64.1545 10.0269 64.2135 10.547 64.2135 12.8695V21.299C64.2135 21.4112 64.2554 21.5215 64.3319 21.6002C64.4102 21.6831 64.515 21.7264 64.6237 21.7264H66.3754C66.4823 21.7264 66.5909 21.6831 66.6654 21.6002C66.7436 21.5215 66.7894 21.4112 66.7894 21.299V12.5976C66.7894 8.89033 66.1577 8.23028 65.3793 7.38517C64.639 6.57969 63.3205 6.05561 61.7941 6.05561Z" fill="white"/>
+      <path d="M49.4949 4.05613C50.3669 4.0543 51.0729 3.32535 51.0747 2.42506C51.0729 1.52659 50.3669 0.79581 49.4949 0.793981C48.6229 0.79581 47.9168 1.52659 47.915 2.42506C47.9168 3.32535 48.6229 4.0543 49.4949 4.05613Z" fill="white"/>
+      <path d="M45.9283 6.20531C45.6956 6.12451 45.2795 6.05958 44.6499 6.05561C43.5033 6.05561 41.7401 6.31963 39.9922 7.48577C39.7347 6.97176 38.8819 6.34921 38.0176 6.05165C37.8286 5.98671 37.6207 6.07146 37.5271 6.2486L36.7965 7.60407C36.6858 7.81077 36.7563 8.06503 36.9548 8.18515C37.4107 8.45497 37.882 8.6324 37.882 9.54032V21.299C37.882 21.5353 38.0616 21.7264 38.2942 21.7264H40.0457C40.2727 21.7264 40.4561 21.5331 40.4561 21.299C40.4561 21.299 40.4523 11.5144 40.4561 10.0074C41.805 8.81929 43.3772 8.55344 44.4456 8.55344C44.9284 8.55344 45.4723 8.63606 45.6897 8.67753C46.0104 8.73667 46.2029 8.54948 46.2029 8.26198V6.60713C46.2029 6.42603 46.0924 6.26628 45.9283 6.20531Z" fill="white"/>
+      <path d="M52.2124 20.115C51.4071 19.6522 50.7584 19.597 50.7584 17.4754V6.84747C50.7584 6.61119 50.5774 6.42217 50.3464 6.42217H48.5968C48.3697 6.42217 48.1846 6.61302 48.1846 6.84747V17.0242C48.1846 18.9625 48.4459 19.9415 49.2453 20.9146C49.7378 21.5137 50.3884 21.943 51.1154 22.2149C51.287 22.278 51.4836 22.2308 51.6056 22.0277L52.3651 20.704C52.472 20.507 52.4165 20.2333 52.2124 20.115Z" fill="white"/>
+      <path d="M20.1878 20.115C19.3825 19.6522 18.7358 19.597 18.7358 17.4754V0.425608C18.7358 0.19116 18.5506 5.72205e-06 18.3218 5.72205e-06H16.5721C16.3451 5.72205e-06 16.1599 0.192989 16.1599 0.425608V17.0242C16.1599 18.9625 16.4212 19.9415 17.2206 20.9146C17.7132 21.5137 18.3616 21.943 19.0907 22.2149C19.2585 22.278 19.4569 22.2308 19.583 22.0277L20.3404 20.704C20.4453 20.507 20.3918 20.2333 20.1878 20.115Z" fill="white"/>
+      <path d="M76.4494 27.6775C73.3355 27.6775 70.8131 26.661 70.8131 24.6675C70.8131 22.7092 73.3355 21.6593 76.4494 21.6593C79.5595 21.6593 82.0819 22.7092 82.0819 24.6675C82.0819 26.661 79.5595 27.6775 76.4494 27.6775ZM73.4519 9.32773C74.217 8.79969 75.2759 8.55945 76.2796 8.56128C77.4074 8.55945 78.4758 8.80365 79.2238 9.32773C79.9697 9.85547 80.4371 10.618 80.4448 11.8689C80.4371 13.0999 79.9658 13.8606 79.2046 14.3963C78.4394 14.9243 77.348 15.1764 76.1937 15.1743C75.2036 15.1764 74.1674 14.942 73.4215 14.4179C72.6735 13.892 72.183 13.1277 72.1735 11.8689C72.1812 10.6298 72.685 9.86553 73.4519 9.32773ZM76.6021 19.3584C75.9858 19.3584 74.4975 19.4608 73.8603 19.5102C73.5644 19.5337 72.5819 19.4136 72.5819 18.5803C72.5819 17.5935 73.6542 17.4398 74.2704 17.4654C74.6617 17.4791 75.3524 17.5325 76.1937 17.5325C77.9531 17.5325 79.6321 17.1816 80.9143 16.2856C82.1965 15.3929 83.0304 13.9097 83.0227 11.8689C83.0207 11.0335 82.7918 10.3186 82.5609 9.62102C82.3967 9.11279 82.9655 8.32897 83.9346 7.82074C84.1103 7.72806 84.2571 7.49757 84.0988 7.2238L83.5053 6.19546C83.3679 5.97686 83.2097 5.92961 82.9959 5.98479C82.6524 6.07534 81.4695 6.65856 80.8742 7.44056C79.7045 6.61313 78.1341 6.14028 76.2566 6.14028C74.3773 6.14028 72.618 6.67807 71.4332 7.67501C70.2444 8.67378 69.5652 10.1411 69.5673 11.8689C69.5652 13.8703 70.5078 15.32 71.6698 16.2459C71.1489 16.6185 70.4658 17.2862 70.4658 18.4523C70.4658 19.2364 70.7845 19.9337 71.378 20.4517C69.838 21.2004 68.1743 22.3172 68.1859 24.8586C68.1859 25.2485 68.2984 25.615 68.3937 25.9065C68.5751 26.472 68.1132 27.25 67.0484 27.8253C66.8425 27.9375 66.7622 28.1817 66.8824 28.4259L67.4952 29.4781C67.5905 29.6436 67.7831 29.7223 67.9605 29.6692C68.697 29.4524 69.6225 28.8714 70.1014 28.2586C71.7728 29.4741 74.072 30 76.4571 30C82.5305 30 84.7493 27.3031 84.7493 24.6833C84.7493 21.941 82.3338 19.3584 76.6021 19.3584Z" fill="white"/>
+      <path d="M24.5547 12.7731C24.6672 11.4197 25.07 10.3856 25.6804 9.68043C26.3616 8.90422 27.3137 8.48258 28.5787 8.47862C29.8916 8.48258 30.9065 8.91398 31.6297 9.69994C32.2862 10.4112 32.7155 11.4396 32.8337 12.7731H24.5547ZM28.7237 6.05944C26.6363 6.05548 24.8866 6.70181 23.6865 8.06307C22.4882 9.42037 21.8643 11.4356 21.8643 14.0734C21.8643 16.8684 22.5798 18.8955 23.8658 20.2135C25.1483 21.5293 26.9437 22.0888 28.9777 22.0888H28.9871C31.164 22.0888 32.9214 21.226 34.3373 20.1346C34.5166 19.9989 34.5567 19.7367 34.4271 19.5477L33.5816 18.3126C33.4349 18.0959 33.1656 18.0879 32.9958 18.2178C32.0172 18.9644 30.3552 19.6736 28.8421 19.6696C27.6361 19.666 26.6289 19.3074 25.8847 18.537C25.2035 17.8297 24.7168 16.7444 24.5642 15.1645H34.9365C35.1597 15.1645 35.3428 14.9773 35.3466 14.745C35.3466 14.745 35.377 14.2819 35.377 13.5118C35.377 11.524 34.8485 9.61336 33.7343 8.25027C32.6219 6.88687 30.9198 6.05548 28.7237 6.05944Z" fill="white"/>
+      <path d="M2.69045 12.7731C2.80296 11.4197 3.20368 10.3856 3.81612 9.68044C4.49737 8.90423 5.44557 8.48259 6.71269 8.47863C8.02528 8.48259 9.04229 8.91399 9.76931 9.69995C10.4198 10.4112 10.8492 11.4396 10.9676 12.7731H2.69045ZM6.85945 6.05945C4.77023 6.05549 3.02236 6.70182 1.82228 8.06308C0.62219 9.42038 0 11.4356 0 14.0734C0 16.8684 0.715504 18.8956 1.99975 20.2135C3.284 21.5294 5.0794 22.0888 7.11341 22.0888H7.12079C9.29978 22.0888 11.0553 21.226 12.471 20.1346C12.6505 19.9989 12.6904 19.7367 12.5625 19.5477L11.7156 18.3126C11.5686 18.0959 11.3013 18.0879 11.1315 18.2178C10.1508 18.9645 8.49097 19.6736 6.9758 19.6696C5.7701 19.666 4.76639 19.3074 4.02047 18.537C3.33922 17.8297 2.8508 16.7444 2.69813 15.1645H13.0701C13.2954 15.1645 13.4785 14.9773 13.4841 14.745C13.4841 14.745 13.5128 14.2819 13.5128 13.5118C13.5128 11.524 12.9842 9.61337 11.868 8.25028C10.7556 6.88688 9.05764 6.05549 6.85945 6.05945Z" fill="white"/>
+    </svg>
+    <span class="brand-sub">BHT ELEKTER</span>
+  </div>
+  <div class="topbar-right">
+    <span class="item"><svg class="icon"><use href="#i-clock"/></svg>21.04.2026 14:12</span>
+    <span class="item"><svg class="icon"><use href="#i-bell"/></svg>Teavitused</span>
+    <span class="sep"></span>
+    <span class="item"><svg class="icon"><use href="#i-user"/></svg>MARI MAASIKAS</span>
+    <span class="item"><svg class="icon"><use href="#i-logout"/></svg>Logi välja</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="side-back"><svg class="icon icon-sm"><use href="#i-chevron-left"/></svg>SEADED</div>
+    <a class="side-item">Sõnumi väljad</a>
+    <a class="side-item">Koodiloend</a>
+    <a class="side-item active">Valemid</a>
+    <a class="side-item">Triggerid</a>
+    <a class="side-item">Workflow'd</a>
+    <a class="side-item">Mõõteühikud</a>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="page-head">
+      <h1 class="page-title">Valemid</h1>
+      <div class="page-actions">
+        <button class="btn btn-secondary" onclick="toast('Impordi vorm avaneks siin')"><svg class="icon"><use href="#i-upload"/></svg>Impordi</button>
+        <button class="btn btn-primary" onclick="toast('Uue valemi vorm avaneks siin')"><svg class="icon"><use href="#i-plus"/></svg>Lisa uus</button>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <svg class="icon search-icon"><use href="#i-search"/></svg>
+        <input id="searchInput" class="input" type="text" placeholder="Otsi koodi või kirjelduse järgi…">
+      </div>
+      <div class="field">
+        <span class="field-label">Tüüp</span>
+        <div class="select-wrap">
+          <select id="typeFilter" class="select">
+            <option>Kõik</option>
+            <option>Sõnum</option>
+            <option>Andmed</option>
+            <option>Teavitus</option>
+          </select>
+          <svg class="icon icon-sm chev-icon"><use href="#i-chevron-down"/></svg>
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Workflow</span>
+        <div class="select-wrap">
+          <select id="wfFilter" class="select">
+            <option>Kõik</option>
+            <option>RESERVE-mFRR</option>
+            <option>RESERVE-CALC</option>
+            <option>SETTLEMENT</option>
+            <option>OPPLAN-SYSPLAN</option>
+          </select>
+          <svg class="icon icon-sm chev-icon"><use href="#i-chevron-down"/></svg>
+        </div>
+      </div>
+      <div class="toggle-wrap">
+        <label for="activeToggle">Kuva aktiivsed</label>
+        <div id="activeToggle" class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table id="formulaTable">
+        <colgroup>
+          <col style="width:44px">
+          <col style="width:260px">
+          <col>
+          <col style="width:130px">
+          <col style="width:130px">
+          <col style="width:170px">
+          <col style="width:280px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="sorted">Kood <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th>Kirjeldus <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th>Algus (EET) <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th>Lõpp (EET) <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th>Workflow <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th style="text-align:right">Tegevused</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+
+      <div class="table-footer">
+        <span id="countLabel">Näitab 9 / 142 kirjet</span>
+        <div class="pagination">
+          <button class="page-btn" disabled><svg class="icon icon-sm"><use href="#i-chevron-left"/></svg></button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">…</button>
+          <button class="page-btn">16</button>
+          <button class="page-btn"><svg class="icon icon-sm"><use href="#i-chevron-right"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast">
+  <svg class="icon"><use href="#i-info"/></svg>
+  <span id="toastText"></span>
+</div>
+
+<script>
+const rows = [
+  {
+    code: "SENDOUT_TSOMOL",
+    descr: "A37 välja saatmine läbi TSO MOL",
+    start: "05.07.24 13:18",
+    end:   "31.12.80 10:55",
+    workflow: "RESERVE-mFRR",
+    type: "Sõnum",
+    warn: false,
+    versions: [
+      { start: "05.07.24 13:18", end: "31.12.80 10:55", active: true },
+      { start: "10.02.20 08:57", end: "05.07.24 13:18", active: false },
+      { start: "19.04.18 00:00", end: "10.02.20 08:57", active: false },
+      { start: "12.03.18 09:44", end: "19.04.18 00:00", active: false },
+      { start: "29.11.17 11:57", end: "12.03.18 09:44", active: false }
+    ]
+  },
+  { code: "B21_BID_IN",            descr: "B21 sõnumi töötlus DATA staatusesse",            start: "12.02.24 15:03", end: "—",              workflow: "RESERVE-CALC",      type: "Sõnum",    warn: false },
+  { code: "A09_AC_DC_SCADA",       descr: "Kooperib ac, dc andmed SCADAst BHTsse",           start: "12.02.24 15:03", end: "—",              workflow: "—",                 type: "Andmed",   warn: false },
+  { code: "TEAVITUS",              descr: "ACT A40 tellimuse (A10) teavituse saatmine",      start: "12.02.24 15:03", end: "—",              workflow: "RESERVE-mFRR",      type: "Teavitus", warn: false },
+  { code: "AVP_Koond_ERALDATUD_V6RK_KUST", descr: "Arvutab EVP koondraporti eraldatud mahtude põhjal", start: "12.02.24 15:03", end: "—", workflow: "SETTLEMENT",   type: "Andmed",   warn: false },
+  { code: "aFRR_SETTLEMENT_ENERGY_UNIT_P", descr: "Arvutab aFRR energiamahud ühikute kaupa",  start: "12.02.24 15:03", end: "—",              workflow: "SETTLEMENT",        type: "Andmed",   warn: false },
+  { code: "A09_SYSPLAN_CONF",      descr: "Kontrollime, kas pärast A09 SYSPLAN saabumist …", start: "12.02.24 15:03", end: "—",              workflow: "OPPLAN-SYSPLAN",    type: "Sõnum",    warn: false },
+  { code: "A02_CALC_DEFAULT_ELR",  descr: "Arvutab ELER algväärtused vaikeseadete alusel",   start: "12.02.24 15:03", end: "—",              workflow: "—",                 type: "Andmed",   warn: false },
+  { code: "ESP_BH_A07_CONF_VANA",  descr: "BH summaarne määratud maht kinnituseks",          start: "12.02.24 15:03", end: "—",              workflow: "SETTLEMENT",        type: "Sõnum",    warn: true  }
+];
+
+function ic(id, size){ return `<svg class="icon${size==='sm'?' icon-sm':''}"><use href="#i-${id}"/></svg>`; }
+
+function render(list) {
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  list.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    tr.dataset.idx = i;
+    if (r.warn) tr.classList.add("row-warn");
+    const hasVersions = r.versions && r.versions.length > 0;
+
+    tr.innerHTML = `
+      <td><span class="row-index">${i + 1}</span></td>
+      <td>
+        <span class="code-wrap">
+          ${hasVersions
+            ? `<button class="expand-btn" onclick="toggleExpand(this, event)" aria-label="Laienda">${ic('chevron-right','sm')}</button>`
+            : `<span style="display:inline-block;width:24px"></span>`}
+          <span class="code-cell">${r.code}</span>
+        </span>
+      </td>
+      <td title="${r.descr}"><span class="inline-desc">${r.descr}</span></td>
+      <td>${r.start}</td>
+      <td>${r.end}</td>
+      <td>${r.workflow === "—" ? '<span style="color:var(--ink-400)">—</span>' : `<span class="chip">${r.workflow}</span>`}</td>
+      <td>
+        <div class="row-actions">
+          <button class="add-formula-btn" onclick="toast('Uue valemi versiooni vorm: ${r.code}')">${ic('plus','sm')}Lisa valem</button>
+          <button class="log-btn" onclick="toast('Logi vaade: ${r.code}')">${ic('list','sm')}Logi</button>
+          <button class="icon-btn" title="Muuda" onclick="toast('Muuda: ${r.code}')">${ic('pencil')}</button>
+          <button class="icon-btn" title="Laadi alla" onclick="toast('Allalaadimine: ${r.code}')">${ic('download')}</button>
+          <button class="icon-btn danger" title="Kustuta" onclick="confirmDelete('${r.code}')">${ic('trash')}</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+    if (hasVersions) {
+      r.versions.forEach((v, vi) => {
+        const child = document.createElement("tr");
+        child.className = "child-row" + (v.active ? " active" : "");
+        child.dataset.parent = i;
+        child.style.display = "none";
+        child.innerHTML = `
+          <td></td>
+          <td style="font-size:12px">v${r.versions.length - vi}${v.active?' • aktiivne':''}</td>
+          <td></td>
+          <td>${v.start}</td>
+          <td>${v.end}</td>
+          <td></td>
+          <td>
+            <div class="row-actions">
+              <button class="log-btn" onclick="toast('Logi versioonile v${r.versions.length - vi}')">${ic('list','sm')}Logi</button>
+              <button class="icon-btn" title="Muuda">${ic('pencil')}</button>
+              <button class="icon-btn" title="Laadi alla">${ic('download')}</button>
+              <button class="icon-btn danger" title="Kustuta">${ic('trash')}</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(child);
+      });
+    }
+  });
+}
+
+function toggleExpand(btn, ev) {
+  ev.stopPropagation();
+  const tr = btn.closest("tr");
+  const idx = tr.dataset.idx;
+  const expanded = tr.classList.toggle("expanded");
+  document.querySelectorAll(`tr.child-row[data-parent="${idx}"]`).forEach(child => {
+    child.style.display = expanded ? "" : "none";
+  });
+}
+
+function applyFilter() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const wf = document.getElementById("wfFilter").value;
+  const tp = document.getElementById("typeFilter").value;
+  const filtered = rows.filter(r => {
+    if (q && !(r.code.toLowerCase().includes(q) || r.descr.toLowerCase().includes(q))) return false;
+    if (wf !== "Kõik" && r.workflow !== wf) return false;
+    if (tp !== "Kõik" && r.type !== tp) return false;
+    return true;
+  });
+  render(filtered);
+  document.getElementById("countLabel").textContent = `Näitab ${filtered.length} / ${rows.length} kirjet`;
+}
+
+document.getElementById("searchInput").addEventListener("input", applyFilter);
+document.getElementById("wfFilter").addEventListener("change", applyFilter);
+document.getElementById("typeFilter").addEventListener("change", applyFilter);
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById("toast");
+  document.getElementById("toastText").textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+function confirmDelete(code) {
+  if (confirm(`Kas oled kindel, et soovid kustutada valemit "${code}"?`)) {
+    toast(`Kustutatud: ${code}`);
+  }
+}
+
+render(rows);
+</script>
+
+</body>
+</html>
