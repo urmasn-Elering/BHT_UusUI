@@ -774,6 +774,8 @@ let state = {
 function init() {
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
+  const isNewVersion = params.get("newversion") === "1";
+  const versionNum = params.get("version");
   const formulaData = code ? FORMULAS[code] : null;
 
   const titleEl = document.getElementById("editorTitle");
@@ -782,30 +784,63 @@ function init() {
   const editorInput = document.getElementById("edInput");
 
   if (formulaData) {
-    state.mode = "edit";
     state.originalCode = code;
     state.backUrl = "valem-detail.html?code=" + encodeURIComponent(code);
     backLink.href = state.backUrl;
     backLink.innerHTML = '<svg class="icon icon-sm"><use href="#i-chevron-left"/></svg>Tagasi: ' + code;
 
-    titleEl.innerHTML = `
-      <svg class="icon" style="color:var(--teal-700)"><use href="#i-code"/></svg>
-      <span>Valemi redaktor:</span>
-      <span class="title-code">${escapeHtml(code)}</span>
-      <span class="mode-badge"><svg class="icon icon-xs"><use href="#i-code"/></svg>Muutmine</span>
-    `;
-
-    metaEl.innerHTML = `
-      <span class="m-item"><svg class="icon icon-xs"><use href="#i-info"/></svg><b>Kirjeldus:</b> ${escapeHtml(formulaData.descr)}</span>
-      <span class="m-item"><b>Workflow:</b> ${escapeHtml(formulaData.workflow)}</span>
-      <span class="m-item"><b>Viimati muutis:</b> ${escapeHtml(formulaData.updatedBy)} · ${escapeHtml(formulaData.updatedAt)}</span>
-    `;
-
-    editorInput.value = formulaData.formula;
-    state.savedValue = formulaData.formula;
-
     document.getElementById("tbPeriod").value = formulaData.period;
     document.getElementById("tbMessage").value = formulaData.message;
+
+    if (isNewVersion) {
+      // New version of an existing formula — start from previous code as starting point
+      state.mode = "newversion";
+      titleEl.innerHTML = `
+        <svg class="icon" style="color:var(--teal-700)"><use href="#i-code"/></svg>
+        <span>Valemi redaktor:</span>
+        <span class="title-code">${escapeHtml(code)}</span>
+        <span class="mode-badge new"><svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus versioon</span>
+      `;
+      metaEl.innerHTML = `
+        <span class="m-item"><svg class="icon icon-xs"><use href="#i-info"/></svg><b>Kirjeldus:</b> ${escapeHtml(formulaData.descr)}</span>
+        <span class="m-item"><b>Workflow:</b> ${escapeHtml(formulaData.workflow)}</span>
+        <span class="m-item" style="color:var(--teal-800)"><svg class="icon icon-xs" style="color:var(--teal-700)"><use href="#i-info"/></svg><b>Algkood võetud</b> aktiivsest versioonist</span>
+      `;
+      editorInput.value = formulaData.formula;
+      state.savedValue = ""; // anything is "dirty" since it's a new version
+    } else if (versionNum) {
+      // Viewing/editing a specific prior version
+      state.mode = "version";
+      titleEl.innerHTML = `
+        <svg class="icon" style="color:var(--teal-700)"><use href="#i-code"/></svg>
+        <span>Valemi redaktor:</span>
+        <span class="title-code">${escapeHtml(code)}</span>
+        <span class="mode-badge"><svg class="icon icon-xs"><use href="#i-history"/></svg>Versioon ${escapeHtml(versionNum)}</span>
+      `;
+      metaEl.innerHTML = `
+        <span class="m-item"><svg class="icon icon-xs"><use href="#i-info"/></svg><b>Kirjeldus:</b> ${escapeHtml(formulaData.descr)}</span>
+        <span class="m-item"><b>Workflow:</b> ${escapeHtml(formulaData.workflow)}</span>
+        <span class="m-item" style="color:var(--amber-500)"><svg class="icon icon-xs"><use href="#i-alert"/></svg><b>Vaatad varasemat versiooni ${escapeHtml(versionNum)}</b></span>
+      `;
+      editorInput.value = formulaData.formula;
+      state.savedValue = formulaData.formula;
+    } else {
+      // Edit the active version
+      state.mode = "edit";
+      titleEl.innerHTML = `
+        <svg class="icon" style="color:var(--teal-700)"><use href="#i-code"/></svg>
+        <span>Valemi redaktor:</span>
+        <span class="title-code">${escapeHtml(code)}</span>
+        <span class="mode-badge"><svg class="icon icon-xs"><use href="#i-code"/></svg>Muutmine</span>
+      `;
+      metaEl.innerHTML = `
+        <span class="m-item"><svg class="icon icon-xs"><use href="#i-info"/></svg><b>Kirjeldus:</b> ${escapeHtml(formulaData.descr)}</span>
+        <span class="m-item"><b>Workflow:</b> ${escapeHtml(formulaData.workflow)}</span>
+        <span class="m-item"><b>Viimati muutis:</b> ${escapeHtml(formulaData.updatedBy)} · ${escapeHtml(formulaData.updatedAt)}</span>
+      `;
+      editorInput.value = formulaData.formula;
+      state.savedValue = formulaData.formula;
+    }
   } else {
     state.mode = "new";
     state.backUrl = "valem-detail.html";
@@ -824,6 +859,11 @@ function init() {
   updateGutter();
   updateStatusbar();
   updateSavedStatus();
+  // For new-version mode we want "dirty" signalled immediately so user knows they'll create a new version on save
+  if (state.mode === "newversion") {
+    state.isDirty = true;
+    updateSavedStatus();
+  }
 
   // Scroll gutter with editor
   const wrap = document.getElementById("edWrap");

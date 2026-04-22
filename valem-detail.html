@@ -95,7 +95,7 @@
 
   /* =========================================== MAIN */
   .main {
-    padding: 16px 24px 100px;
+    padding: 16px 24px 140px;
     min-width: 0;
     max-width: 1400px;
   }
@@ -152,6 +152,26 @@
   .btn-danger-ghost:hover { background: var(--red-050); border-color: #f1c1c7; }
   .btn-sm { height: 30px; padding: 0 10px; font-size: 12.5px; }
   .btn:focus-visible { outline: none; box-shadow: var(--focus); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:disabled:hover { background: #fff; color: var(--ink-700); border-color: var(--line); }
+
+  /* Version table specifics */
+  table.trig-table tbody td.check-cell { width: 36px; text-align: center; }
+  table.trig-table tbody td.check-cell input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--teal-700);
+    cursor: pointer;
+  }
+  .version-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 12.5px; font-weight: 600;
+  }
+  .version-label .ver-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--ink-400);
+    display: inline-block;
+  }
+  .version-label.active .ver-dot { background: var(--green-500); }
+  .version-label.active { color: var(--green-600); }
 
   /* =========================================== FORM SECTIONS */
   .section {
@@ -541,6 +561,7 @@
     <symbol id="i-list" viewBox="0 0 24 24"><path d="M13 5h8M13 9h5M13 15h8M13 19h5"/><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="3" y="14" width="6" height="6" rx="1"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></symbol>
     <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.871l-8.106 -13.534a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></symbol>
+    <symbol id="i-diff" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M4 7l0 13a1 1 0 0 0 1 1h4"/><path d="M20 17l0 -13a1 1 0 0 0 -1 -1h-4"/><path d="M14 8l2 -2l2 2"/><path d="M8 16l2 2l-2 2"/></symbol>
   </defs>
 </svg>
 
@@ -687,6 +708,27 @@
       </div>
     </section>
 
+    <!-- SECTION 3: Versioonid -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">
+          Valemi versioonid
+          <span id="verCount" class="count zero">0</span>
+        </h2>
+        <div class="section-toolbar" id="verToolbar">
+          <button class="btn btn-ghost btn-sm" id="diffBtn" onclick="openDiff()" disabled>
+            <svg class="icon icon-sm"><use href="#i-diff"/></svg>Võrdle valitud
+          </button>
+          <a class="btn btn-primary btn-sm" id="addVersionBtn" href="#">
+            <svg class="icon icon-sm"><use href="#i-plus"/></svg>Lisa valemi versioon
+          </a>
+        </div>
+      </div>
+      <div id="verTableWrap" class="trig-table-wrap">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -712,9 +754,6 @@
 
         <label for="tmName">Nimi <span class="req">*</span></label>
         <input id="tmName" class="input mono" type="text" placeholder="nt. CALC_FG_EEFI" autocomplete="off">
-
-        <label for="tmFormula">Valem <span class="req">*</span></label>
-        <select id="tmFormula" class="select"></select>
 
         <div class="info-box" id="tmFormulaDescr">—</div>
 
@@ -870,6 +909,13 @@ if ($METAS['coordinated'] == "SENDOUT_TSOMOL") {
           { key: "message_type", val: "A37", regex: false }
         ]
       }
+    ],
+    versions: [
+      { num: 5, start: "05.07.2024 13:18", end: "31.12.2080 10:55", active: true,  updatedBy: "Mari Maasikas", updatedAt: "05.07.2024 13:19" },
+      { num: 4, start: "10.02.2020 08:57", end: "05.07.2024 13:18", active: false, updatedBy: "Urmas Nurme",   updatedAt: "05.07.2024 13:18" },
+      { num: 3, start: "19.04.2018 00:00", end: "10.02.2020 08:57", active: false, updatedBy: "Urmas Nurme",   updatedAt: "12.02.2024 15:03" },
+      { num: 2, start: "12.03.2018 09:44", end: "19.04.2018 00:00", active: false, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03" },
+      { num: 1, start: "29.11.2017 11:57", end: "12.03.2018 09:44", active: false, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03" }
     ]
   },
 
@@ -904,6 +950,10 @@ return $border;
           { key: "sender_identification", val: "10X1001A1001A264", regex: false }
         ]
       }
+    ],
+    versions: [
+      { num: 2, start: "12.02.2024 15:03", end: "31.12.2080 00:00", active: true,  updatedBy: "Urmas Nurme", updatedAt: "12.02.2024 15:03" },
+      { num: 1, start: "10.02.2020 08:57", end: "12.02.2024 15:03", active: false, updatedBy: "Mari Maasikas", updatedAt: "10.02.2020 08:57" }
     ]
   },
 
@@ -936,22 +986,12 @@ return $bid;
           { key: "receiver_identification", val: "10X1001A1001A264", regex: false }
         ]
       }
+    ],
+    versions: [
+      { num: 1, start: "12.02.2024 15:03", end: "31.12.2080 00:00", active: true, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03" }
     ]
   }
 };
-
-/* List for Formula dropdown in trigger modal */
-const ALL_FORMULA_CODES = [
-  "SENDOUT_TSOMOL",
-  "A13_CALC_EEFI_BORDER",
-  "A13_CALC_EEEL_BORDER",
-  "B21_BID_IN",
-  "TEAVITUS",
-  "A09_AC_DC_SCADA",
-  "aFRR_SETTLEMENT_ENERGY_UNIT_P",
-  "A02_CALC_DEFAULT_ELR",
-  "ESP_BH_A07_CONF_VANA"
-];
 
 /* ============================================================
    State
@@ -960,6 +1000,7 @@ let state = {
   mode: "new",        // "new" | "edit" | "newversion"
   originalCode: null,
   triggers: [],
+  versions: [],
   isDirty: false,
   editingTrigIdx: null
 };
@@ -976,6 +1017,7 @@ function init() {
     const f = FORMULAS[code];
     state.originalCode = code;
     state.triggers = JSON.parse(JSON.stringify(f.triggers || []));
+    state.versions = JSON.parse(JSON.stringify(f.versions || []));
 
     if (isNewVersion) {
       state.mode = "newversion";
@@ -1006,6 +1048,7 @@ function init() {
 
   updateFooterInfo();
   renderTriggers();
+  renderVersions();
 
   // Track dirtiness
   document.querySelectorAll("input, select, textarea").forEach(el => {
@@ -1013,16 +1056,19 @@ function init() {
     el.addEventListener("change", markDirty);
   });
 
-  // Populate formula dropdown in trigger modal
-  const tmF = document.getElementById("tmFormula");
-  tmF.innerHTML = ALL_FORMULA_CODES.map(c =>
-    `<option${c === (state.originalCode||"") ? ' selected' : ''}>${c}</option>`
-  ).join("");
-  tmF.addEventListener("change", () => {
-    const c = tmF.value;
-    const d = FORMULAS[c]?.descr || "Kirjeldust pole saadaval";
-    document.getElementById("tmFormulaDescr").textContent = d;
-  });
+  // Fill the context info-box (the formula this trigger belongs to)
+  updateTrigModalContextInfo();
+}
+
+function updateTrigModalContextInfo() {
+  const box = document.getElementById("tmFormulaDescr");
+  const code = document.getElementById("fCode").value.trim() || "(kood määramata)";
+  const descr = document.getElementById("fDescr").value.trim() || "";
+  box.innerHTML = `
+    <div style="font-size:11px;font-weight:600;color:var(--ink-500);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:2px">Seotud valem</div>
+    <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--teal-800)">${escapeHtml(code)}</div>
+    ${descr ? `<div style="font-size:12px;color:var(--ink-700);margin-top:2px">${escapeHtml(descr)}</div>` : ""}
+  `;
 }
 
 function setTitle(title, mode) {
@@ -1174,6 +1220,144 @@ function deleteTrigger(i) {
 }
 
 /* ============================================================
+   Versions table
+   ============================================================ */
+function renderVersions() {
+  const wrap = document.getElementById("verTableWrap");
+  const cntEl = document.getElementById("verCount");
+  const addBtn = document.getElementById("addVersionBtn");
+  const diffBtn = document.getElementById("diffBtn");
+
+  cntEl.textContent = state.versions.length;
+  cntEl.className = "count" + (state.versions.length === 0 ? " zero" : "");
+
+  // Set add-version button href based on state
+  if (state.originalCode) {
+    addBtn.href = "valem-editor.html?code=" + encodeURIComponent(state.originalCode) + "&newversion=1";
+  } else if (state.mode === "new") {
+    // For a brand-new formula, we can't make a "new version" yet — first save the formula
+    addBtn.href = "#";
+    addBtn.onclick = (e) => {
+      e.preventDefault();
+      toast("Salvesta valem enne versiooni lisamist", "error");
+    };
+  }
+
+  if (state.versions.length === 0) {
+    wrap.innerHTML = `
+      <div class="empty-triggers">
+        <svg class="icon"><use href="#i-code"/></svg>
+        <div>Sellel valemil pole veel koodiversioone.</div>
+        <div style="font-size:12px;margin-top:2px">Versiooni lisamine avab valemi redaktori.</div>
+      </div>`;
+    diffBtn.disabled = true;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <table class="trig-table">
+      <colgroup>
+        <col style="width:36px">
+        <col style="width:auto">
+        <col style="width:160px">
+        <col style="width:160px">
+        <col style="width:180px">
+        <col style="width:260px">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="center" style="padding:9px 4px"><input type="checkbox" id="verCheckAll" onchange="toggleAllVersions(this)" title="Märgi kõik"></th>
+          <th>Versioon</th>
+          <th>Kehtivuse algus (EET)</th>
+          <th>Kehtivuse lõpp (EET)</th>
+          <th>Viimati muutis</th>
+          <th style="text-align:right">Tegevused</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${state.versions.map((v, i) => `
+          <tr>
+            <td class="check-cell">
+              <input type="checkbox" class="ver-check" data-idx="${i}" onchange="onVersionCheck()">
+            </td>
+            <td>
+              <span class="version-label ${v.active ? 'active' : ''}">
+                <span class="ver-dot"></span>Versioon ${v.num}${v.active ? ' · aktiivne' : ''}
+              </span>
+            </td>
+            <td>${escapeHtml(v.start)}</td>
+            <td>${escapeHtml(v.end)}</td>
+            <td style="font-size:12px;color:var(--ink-500)">${escapeHtml(v.updatedBy)} · ${escapeHtml(v.updatedAt)}</td>
+            <td>
+              <div class="row-actions">
+                <button class="log-btn" onclick="toast('Logi versioonile v${v.num}', 'info')">
+                  <svg class="icon icon-sm"><use href="#i-list"/></svg>Logi
+                </button>
+                <a class="icon-btn" title="Muuda" href="valem-editor.html?code=${encodeURIComponent(state.originalCode||'')}&version=${v.num}">
+                  <svg class="icon"><use href="#i-pencil"/></svg>
+                </a>
+                <button class="icon-btn danger" title="Kustuta" onclick="deleteVersion(${i})">
+                  <svg class="icon"><use href="#i-trash"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>`;
+
+  // Re-evaluate diff button state
+  onVersionCheck();
+}
+
+function toggleAllVersions(checkbox) {
+  document.querySelectorAll(".ver-check").forEach(cb => cb.checked = checkbox.checked);
+  onVersionCheck();
+}
+
+function onVersionCheck() {
+  const checked = document.querySelectorAll(".ver-check:checked");
+  const diffBtn = document.getElementById("diffBtn");
+  // Diff requires exactly 2 checked
+  diffBtn.disabled = checked.length !== 2;
+  diffBtn.title = checked.length === 2
+    ? "Võrdle valitud kahte versiooni"
+    : "Vali kaks versiooni võrdluseks";
+
+  // Update "check all" state
+  const all = document.querySelectorAll(".ver-check");
+  const allCheck = document.getElementById("verCheckAll");
+  if (allCheck) {
+    allCheck.checked = all.length > 0 && checked.length === all.length;
+    allCheck.indeterminate = checked.length > 0 && checked.length < all.length;
+  }
+}
+
+function openDiff() {
+  const checked = [...document.querySelectorAll(".ver-check:checked")].map(cb => parseInt(cb.dataset.idx, 10));
+  if (checked.length !== 2) return;
+  const v1 = state.versions[checked[0]];
+  const v2 = state.versions[checked[1]];
+  // Order: newer on right (higher num)
+  const [older, newer] = v1.num < v2.num ? [v1, v2] : [v2, v1];
+  toast(`Võrdle: Versioon ${older.num} ↔ Versioon ${newer.num} — diffi vaade avaneks siin`, "info");
+}
+
+function deleteVersion(i) {
+  const v = state.versions[i];
+  if (v.active) {
+    toast("Aktiivset versiooni ei saa kustutada", "error");
+    return;
+  }
+  if (confirm(`Kas kustutada Versioon ${v.num}? Seda tegevust ei saa tagasi võtta.`)) {
+    state.versions.splice(i, 1);
+    markDirty();
+    renderVersions();
+    toast(`Versioon ${v.num} kustutatud`, "success");
+  }
+}
+
+/* ============================================================
    Trigger modal
    ============================================================ */
 let modalRules = [];
@@ -1189,8 +1373,7 @@ function openTrigger(idx) {
   } : JSON.parse(JSON.stringify(state.triggers[idx]));
 
   document.getElementById("tmName").value = t.name;
-  document.getElementById("tmFormula").value = state.originalCode || ALL_FORMULA_CODES[0];
-  document.getElementById("tmFormula").dispatchEvent(new Event("change"));
+  updateTrigModalContextInfo();
   document.getElementById("tmStatus").value = t.status || "DATA";
   document.getElementById("tmType").value = t.type || "Sõnum";
   document.getElementById("tmOnDataChange").checked    = !!t.onDataChange;
