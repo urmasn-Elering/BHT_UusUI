@@ -336,30 +336,12 @@
   }
   tbody tr:nth-child(odd) td { background: var(--bg-zebra); }
   tbody tr:hover td { background: var(--teal-050); }
-  tbody tr.expanded td { background: #fff !important; }
-  tbody tr.child-row td {
-    background: #fff !important;
-    color: var(--ink-500); font-size: 12.5px;
-    padding: 7px 12px;
-    border-top: 1px dashed var(--line-soft);
-  }
-  tbody tr.child-row.active td { color: var(--green-600); font-weight: 600; }
   tbody tr.row-warn td { background: var(--amber-050) !important; }
 
   /* Highlight rows that were matched by trigger-rule filter */
   tbody tr.filter-match td { box-shadow: inset 3px 0 0 var(--teal-700); }
 
   .row-index { color: var(--ink-400); font-variant-numeric: tabular-nums; font-size: 12px; }
-
-  .expand-btn {
-    background: none; border: none; padding: 0;
-    width: 20px; height: 20px;
-    display: inline-flex; align-items: center; justify-content: center;
-    color: var(--ink-700); margin-right: 4px;
-  }
-  .expand-btn:hover { color: var(--teal-700); }
-  .expand-btn .icon { transition: transform .15s; }
-  tr.expanded .expand-btn .icon { transform: rotate(90deg); }
 
   .code-cell { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--ink-900); }
   a.code-cell:hover { color: var(--teal-700); text-decoration: underline; text-underline-offset: 3px; }
@@ -741,11 +723,6 @@ const FORMULAS = [
         { key: "message_type", val: "A37" },
         { key: "process_type", val: "A46" }
       ]}
-    ],
-    versions: [
-      { start: "05.07.24 13:18", end: "31.12.80 10:55", active: true },
-      { start: "10.02.20 08:57", end: "05.07.24 13:18", active: false },
-      { start: "19.04.18 00:00", end: "10.02.20 08:57", active: false }
     ]
   },
   {
@@ -972,8 +949,6 @@ function renderTable(rows, q) {
 
   tbody.innerHTML = "";
   rows.forEach((f, i) => {
-    const hasV = f.versions && f.versions.length > 0;
-
     // Determine matching triggers
     const triggers = f.triggers || [];
     const matchedTriggers = q.filters.length > 0
@@ -1011,7 +986,6 @@ function renderTable(rows, q) {
       <td><span class="row-index">${i + 1}</span></td>
       <td>
         <span class="code-wrap">
-          ${hasV ? `<button class="expand-btn" onclick="toggleExpand(this, event)"><svg class="icon icon-sm"><use href="#i-chevron-right"/></svg></button>` : `<span style="display:inline-block;width:24px"></span>`}
           <a class="code-cell" href="valem-detail.html?code=${encodeURIComponent(f.code)}" style="text-decoration:none">${escapeHtml(f.code)}</a>
         </span>
       </td>
@@ -1030,40 +1004,7 @@ function renderTable(rows, q) {
       </td>
     `;
     tbody.appendChild(tr);
-
-    if (hasV) {
-      f.versions.forEach((v, vi) => {
-        const child = document.createElement("tr");
-        child.className = "child-row" + (v.active ? " active" : "");
-        child.dataset.parent = i;
-        child.style.display = "none";
-        child.innerHTML = `
-          <td></td>
-          <td style="font-size:12px;padding-left:48px">v${f.versions.length - vi}${v.active?' • aktiivne':''}</td>
-          <td></td>
-          <td>${v.start}</td>
-          <td>${v.end}</td>
-          <td></td><td></td>
-          <td>
-            <div class="row-actions">
-              <button class="log-btn" onclick="toast('Logi v${f.versions.length - vi}')"><svg class="icon icon-sm"><use href="#i-list"/></svg>Logi</button>
-              <button class="icon-btn"><svg class="icon"><use href="#i-pencil"/></svg></button>
-              <button class="icon-btn danger"><svg class="icon"><use href="#i-trash"/></svg></button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(child);
-      });
-    }
   });
-}
-
-function toggleExpand(btn, ev) {
-  ev.stopPropagation();
-  const tr = btn.closest("tr");
-  const idx = tr.dataset.idx;
-  const expanded = tr.classList.toggle("expanded");
-  document.querySelectorAll(`tr.child-row[data-parent="${idx}"]`).forEach(c => c.style.display = expanded ? "" : "none");
 }
 
 /* ============================================================

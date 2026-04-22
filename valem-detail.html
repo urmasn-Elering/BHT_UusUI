@@ -352,6 +352,10 @@
   }
   .icon-btn:hover { color: var(--teal-700); background: var(--teal-050); }
   .icon-btn.danger:hover { color: var(--red-500); background: var(--red-050); }
+  .icon-btn:disabled {
+    opacity: 0.3; cursor: not-allowed;
+  }
+  .icon-btn:disabled:hover { color: var(--ink-500); background: transparent; }
   .log-btn {
     height: 26px; padding: 0 10px; border-radius: var(--radius);
     background: var(--teal-700); color: #fff; border: 1px solid var(--teal-700);
@@ -509,7 +513,163 @@
     width: 16px; height: 16px; cursor: pointer;
   }
 
-  /* =========================================== TOAST */
+  /* =========================================== DIFF MODAL */
+  .modal.diff-modal {
+    max-width: 1200px;
+    display: flex; flex-direction: column;
+    max-height: 90vh;
+  }
+  .diff-head {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-zebra);
+  }
+  .diff-col-head {
+    padding: 12px 16px;
+  }
+  .diff-col-head.right { border-left: 1px solid var(--line-soft); }
+  .diff-divider { background: var(--line); }
+  .diff-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-500);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .diff-col-head.right .diff-label { text-align: right; }
+  .diff-ver {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+  .diff-col-head.right .diff-ver { text-align: right; }
+  .diff-ver.active { color: var(--green-600); }
+  .diff-meta {
+    font-size: 12px;
+    color: var(--ink-500);
+    margin-top: 3px;
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .diff-col-head.right .diff-meta { text-align: right; }
+
+  .diff-summary {
+    padding: 8px 16px;
+    background: var(--teal-050);
+    border-bottom: 1px solid var(--teal-100);
+    font-size: 12px;
+    color: var(--teal-800);
+    display: flex; align-items: center; gap: 14px;
+    flex-wrap: wrap;
+  }
+  .diff-summary .sum-stat {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--mono);
+  }
+  .diff-summary .sum-stat b { font-weight: 700; }
+  .diff-summary .added-stat { color: var(--green-600); }
+  .diff-summary .removed-stat { color: var(--red-500); }
+
+  .diff-body {
+    flex: 1 1 auto;
+    min-height: 340px;
+    max-height: calc(90vh - 250px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .diff-side {
+    overflow: auto;
+    background: #fbfcfc;
+    position: relative;
+  }
+  .diff-side.left { border-right: 1px solid var(--line); }
+
+  .diff-code {
+    margin: 0;
+    padding: 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 18px;
+    white-space: pre;
+    tab-size: 4;
+  }
+  .diff-line {
+    display: flex;
+    align-items: flex-start;
+    padding: 0;
+    min-height: 18px;
+  }
+  .diff-line .ln-num {
+    flex: 0 0 44px;
+    text-align: right;
+    padding: 0 8px 0 4px;
+    color: var(--ink-400);
+    user-select: none;
+    background: var(--ed-gutter-bg, #f0f3f4);
+    border-right: 1px solid var(--line-soft);
+    font-size: 11px;
+  }
+  .diff-line .ln-content {
+    flex: 1 1 auto;
+    padding: 0 6px;
+    white-space: pre;
+    overflow-x: visible;
+  }
+  .diff-line.added {
+    background: #e7f7ec;
+  }
+  .diff-line.added .ln-num {
+    background: #c8ecd3;
+    color: var(--green-600);
+    font-weight: 600;
+  }
+  .diff-line.removed {
+    background: #fce7ea;
+  }
+  .diff-line.removed .ln-num {
+    background: #f5c9cf;
+    color: var(--red-500);
+    font-weight: 600;
+  }
+  .diff-line.changed {
+    background: #fff6db;
+  }
+  .diff-line.changed .ln-num {
+    background: #ffe8a6;
+    color: #8a6b1a;
+    font-weight: 600;
+  }
+  .diff-line.placeholder {
+    background: repeating-linear-gradient(45deg, #f6f8f9, #f6f8f9 4px, #eef2f3 4px, #eef2f3 8px);
+  }
+  .diff-line.placeholder .ln-num { background: #e8ecee; color: transparent; }
+  .diff-line.placeholder .ln-content { color: transparent; }
+
+  /* Inline word-level marks inside changed lines */
+  .word-add { background: #a8e5bc; border-radius: 2px; padding: 0 1px; }
+  .word-del { background: #f2aab3; border-radius: 2px; padding: 0 1px; text-decoration: line-through; }
+
+  .diff-legend {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .diff-legend.added { background: #c8ecd3; }
+  .diff-legend.removed { background: #f5c9cf; }
+  .diff-legend.changed { background: #ffe8a6; }
+
+  /* Hide scrollbars visually but keep scroll */
+  .diff-side::-webkit-scrollbar { height: 8px; width: 8px; }
+  .diff-side::-webkit-scrollbar-thumb { background: #c4cdd1; border-radius: 4px; }
+  .diff-side::-webkit-scrollbar-track { background: transparent; }
   .toast {
     position: fixed; bottom: 80px; right: 24px;
     background: #fff;
@@ -614,11 +774,6 @@
         <span id="modeBadge" class="page-title-badge new">
           <svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus
         </span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <a id="openEditorBtn" class="btn btn-secondary" href="#">
-          <svg class="icon icon-sm"><use href="#i-code"/></svg>Muuda valemi koodi
-        </a>
       </div>
     </div>
 
@@ -831,6 +986,51 @@
   <span id="toastText"></span>
 </div>
 
+<!-- ============== DIFF MODAL ============== -->
+<div id="diffModal" class="modal-backdrop">
+  <div class="modal diff-modal">
+    <div class="modal-head">
+      <h3 id="diffModalTitle">Versioonide võrdlus</h3>
+      <button class="close-btn" onclick="closeDiff()"><svg class="icon"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="diff-head">
+      <div class="diff-col-head left">
+        <span class="diff-label">◀ Vanem versioon</span>
+        <div class="diff-ver" id="diffLeftVer"></div>
+        <div class="diff-meta" id="diffLeftMeta"></div>
+      </div>
+      <div class="diff-divider"></div>
+      <div class="diff-col-head right">
+        <span class="diff-label">Uuem versioon ▶</span>
+        <div class="diff-ver" id="diffRightVer"></div>
+        <div class="diff-meta" id="diffRightMeta"></div>
+      </div>
+    </div>
+    <div class="diff-summary" id="diffSummary"></div>
+    <div class="diff-body">
+      <div class="diff-side left">
+        <pre id="diffLeftCode" class="diff-code"></pre>
+      </div>
+      <div class="diff-side right">
+        <pre id="diffRightCode" class="diff-code"></pre>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <div style="display:flex;gap:16px;font-size:11.5px;color:var(--ink-500);align-items:center">
+        <span><span class="diff-legend added"></span>Lisatud</span>
+        <span><span class="diff-legend removed"></span>Eemaldatud</span>
+        <span><span class="diff-legend changed"></span>Muudetud</span>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="closeDiff()">Sulge</button>
+        <a id="diffEditBtn" class="btn btn-primary" href="#">
+          <svg class="icon icon-sm"><use href="#i-pencil"/></svg>Muuda aktiivset versiooni
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    Demo data — must match valemid.html for consistency
@@ -911,11 +1111,92 @@ if ($METAS['coordinated'] == "SENDOUT_TSOMOL") {
       }
     ],
     versions: [
-      { num: 5, start: "05.07.2024 13:18", end: "31.12.2080 10:55", active: true,  updatedBy: "Mari Maasikas", updatedAt: "05.07.2024 13:19" },
-      { num: 4, start: "10.02.2020 08:57", end: "05.07.2024 13:18", active: false, updatedBy: "Urmas Nurme",   updatedAt: "05.07.2024 13:18" },
-      { num: 3, start: "19.04.2018 00:00", end: "10.02.2020 08:57", active: false, updatedBy: "Urmas Nurme",   updatedAt: "12.02.2024 15:03" },
-      { num: 2, start: "12.03.2018 09:44", end: "19.04.2018 00:00", active: false, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03" },
-      { num: 1, start: "29.11.2017 11:57", end: "12.03.2018 09:44", active: false, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03" }
+      { num: 5, start: "05.07.2024 13:18", end: "31.12.2080 10:55", active: true,  updatedBy: "Mari Maasikas", updatedAt: "05.07.2024 13:19",
+        formula: `<?
+/**************************************************************
+ * Saadame välja andmed TSO MOLina e. pakkumised BidDocument'il
+ * neile, kes ei kuulu CoBA alasse.
+ * Andmed võetakse Primary MOList.
+ * Käivitab TRIGGER: SENDOUT_TSOMOL
+ *
+ * 2024-07-05 RL debugimise lisamine
+ **************************************************************/
+
+$acquiringArea = $METAS['acquiring_area'];
+var_dump("aqarea: ", $acquiringArea);
+$outgoingMessage = $METAS["identification"];
+var_dump("outgoing message: ", $outgoingMessage);
+
+//FIND TSO
+$receiverTSO = getOSCChildren("", $acquiringArea, "AREA", "A04")[0];
+$ReceiverEIC = $receiverTSO['eic_code'];
+$ReceiverROLE = 'A04';
+
+if ($acquiringArea == '10Y1001A1001A94A') {
+    $CoBA = TRUE;
+} else {
+    $CoBA = FALSE;
+}
+
+if ($outgoingMessage === NULL) {
+    $outgoingMessage = "A37_" . $receiverTSO["screen_name"];
+}
+
+if ($METAS['coordinated'] == "SENDOUT_TSOMOL") {
+    unset($METAS['identification']);
+}
+?>`
+      },
+      { num: 4, start: "10.02.2020 08:57", end: "05.07.2024 13:18", active: false, updatedBy: "Urmas Nurme", updatedAt: "05.07.2024 13:18",
+        formula: `<?
+/**************************************************************
+ * Saadame välja andmed TSO MOLina e. pakkumised BidDocument'il
+ * neile, kes ei kuulu CoBA alasse.
+ * Andmed võetakse Primary MOList.
+ **************************************************************/
+
+$acquiringArea = $METAS['acquiring_area'];
+$outgoingMessage = $METAS["identification"];
+
+//FIND TSO
+$receiverTSO = getOSCChildren("", $acquiringArea, "AREA", "A04")[0];
+$ReceiverEIC = $receiverTSO['eic_code'];
+$ReceiverROLE = 'A04';
+
+if ($acquiringArea == '10Y1001A1001A94A') {
+    $CoBA = TRUE;
+} else {
+    $CoBA = FALSE;
+}
+
+if ($outgoingMessage === NULL) {
+    $outgoingMessage = "A37_" . $receiverTSO["screen_name"];
+}
+?>`
+      },
+      { num: 3, start: "19.04.2018 00:00", end: "10.02.2020 08:57", active: false, updatedBy: "Urmas Nurme",   updatedAt: "12.02.2024 15:03",
+        formula: `<?
+$acquiringArea = $METAS['acquiring_area'];
+$receiverTSO = getOSCChildren("", $acquiringArea, "AREA", "A04")[0];
+$ReceiverEIC = $receiverTSO['eic_code'];
+$ReceiverROLE = 'A04';
+$CoBA = FALSE;
+$outgoingMessage = "A37_" . $receiverTSO["screen_name"];
+?>`
+      },
+      { num: 2, start: "12.03.2018 09:44", end: "19.04.2018 00:00", active: false, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03",
+        formula: `<?
+$acquiringArea = $METAS['acquiring_area'];
+$receiverTSO = getOSCChildren($acquiringArea, "A04")[0];
+$outgoingMessage = "A37_" . $receiverTSO["screen_name"];
+?>`
+      },
+      { num: 1, start: "29.11.2017 11:57", end: "12.03.2018 09:44", active: false, updatedBy: "Mari Maasikas", updatedAt: "12.02.2024 15:03",
+        formula: `<?
+$area = $METAS['acquiring_area'];
+$msg = "A37_" . $area;
+?>`
+      }
     ]
   },
 
@@ -952,8 +1233,18 @@ return $border;
       }
     ],
     versions: [
-      { num: 2, start: "12.02.2024 15:03", end: "31.12.2080 00:00", active: true,  updatedBy: "Urmas Nurme", updatedAt: "12.02.2024 15:03" },
-      { num: 1, start: "10.02.2020 08:57", end: "12.02.2024 15:03", active: false, updatedBy: "Mari Maasikas", updatedAt: "10.02.2020 08:57" }
+      { num: 2, start: "12.02.2024 15:03", end: "31.12.2080 00:00", active: true,  updatedBy: "Urmas Nurme", updatedAt: "12.02.2024 15:03",
+        formula: `<?
+// Arvutab FG linkide failide baasil EE-FI piiri TTC
+$border = getTTC($DATA, 'EEFI');
+return $border;
+?>` },
+      { num: 1, start: "10.02.2020 08:57", end: "12.02.2024 15:03", active: false, updatedBy: "Mari Maasikas", updatedAt: "10.02.2020 08:57",
+        formula: `<?
+// Arvutab Soome piiri TTC
+$border = getTTCOld($DATA);
+return $border;
+?>` }
     ]
   },
 
@@ -1077,26 +1368,19 @@ function setTitle(title, mode) {
 
   const titleEl = document.getElementById("pageTitle");
   const badge = document.getElementById("modeBadge");
-  const editorBtn = document.getElementById("openEditorBtn");
 
   if (mode === "new") {
     titleEl.textContent = "Uus valem";
     badge.className = "page-title-badge new";
     badge.innerHTML = '<svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus';
-    editorBtn.href = "valem-editor.html";
-    editorBtn.innerHTML = '<svg class="icon icon-sm"><use href="#i-code"/></svg>Lisa valemi kood';
   } else if (mode === "newversion") {
     titleEl.innerHTML = 'Uus versioon: <span class="title-code">' + escapeHtml(state.originalCode) + '</span>';
     badge.className = "page-title-badge";
     badge.innerHTML = '<svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus versioon';
-    editorBtn.href = "valem-editor.html?code=" + encodeURIComponent(state.originalCode);
-    editorBtn.innerHTML = '<svg class="icon icon-sm"><use href="#i-code"/></svg>Muuda valemi koodi';
   } else {
     titleEl.innerHTML = 'Muuda valem: <span class="title-code">' + escapeHtml(state.originalCode) + '</span>';
     badge.className = "page-title-badge";
     badge.innerHTML = '<svg class="icon icon-xs"><use href="#i-pencil"/></svg>Muutmine';
-    editorBtn.href = "valem-editor.html?code=" + encodeURIComponent(state.originalCode);
-    editorBtn.innerHTML = '<svg class="icon icon-sm"><use href="#i-code"/></svg>Muuda valemi koodi';
   }
 }
 
@@ -1293,6 +1577,9 @@ function renderVersions() {
                 <button class="log-btn" onclick="toast('Logi versioonile v${v.num}', 'info')">
                   <svg class="icon icon-sm"><use href="#i-list"/></svg>Logi
                 </button>
+                <button class="icon-btn" title="Võrdle aktiivse versiooniga" onclick="diffWithActive(${i})" ${v.active ? 'disabled' : ''}>
+                  <svg class="icon"><use href="#i-diff"/></svg>
+                </button>
                 <a class="icon-btn" title="Muuda" href="valem-editor.html?code=${encodeURIComponent(state.originalCode||'')}&version=${v.num}">
                   <svg class="icon"><use href="#i-pencil"/></svg>
                 </a>
@@ -1338,9 +1625,196 @@ function openDiff() {
   if (checked.length !== 2) return;
   const v1 = state.versions[checked[0]];
   const v2 = state.versions[checked[1]];
-  // Order: newer on right (higher num)
+  // Order: older on left (lower num), newer on right
   const [older, newer] = v1.num < v2.num ? [v1, v2] : [v2, v1];
-  toast(`Võrdle: Versioon ${older.num} ↔ Versioon ${newer.num} — diffi vaade avaneks siin`, "info");
+  showDiffModal(older, newer);
+}
+
+function diffWithActive(idx) {
+  const v = state.versions[idx];
+  if (v.active) return;
+  const active = state.versions.find(x => x.active);
+  if (!active) {
+    toast("Aktiivset versiooni ei leitud", "error");
+    return;
+  }
+  // Place older on the left (lower num), newer on the right
+  const [older, newer] = v.num < active.num ? [v, active] : [active, v];
+  showDiffModal(older, newer);
+}
+
+function showDiffModal(older, newer) {
+  document.getElementById("diffModalTitle").innerHTML =
+    `Versioonide võrdlus: <span style="font-family:var(--mono);font-weight:700">` +
+    `v${older.num}</span> → <span style="font-family:var(--mono);font-weight:700">v${newer.num}</span>`;
+
+  // Header info
+  document.getElementById("diffLeftVer").innerHTML =
+    `Versioon ${older.num}` + (older.active ? ' <span style="color:var(--green-600)">· aktiivne</span>' : '');
+  document.getElementById("diffLeftMeta").innerHTML = `
+    ${escapeHtml(older.start)} → ${escapeHtml(older.end)}<br>
+    ${escapeHtml(older.updatedBy)} · ${escapeHtml(older.updatedAt)}
+  `;
+  document.getElementById("diffRightVer").innerHTML =
+    `Versioon ${newer.num}` + (newer.active ? ' <span style="color:var(--green-600)">· aktiivne</span>' : '');
+  document.getElementById("diffRightMeta").innerHTML = `
+    ${escapeHtml(newer.start)} → ${escapeHtml(newer.end)}<br>
+    ${escapeHtml(newer.updatedBy)} · ${escapeHtml(newer.updatedAt)}
+  `;
+
+  // Compute diff
+  const leftLines  = (older.formula || "").split("\n");
+  const rightLines = (newer.formula || "").split("\n");
+  const diff = computeLineDiff(leftLines, rightLines);
+
+  // Stats
+  let added = 0, removed = 0, changed = 0;
+  diff.forEach(row => {
+    if (row.type === "added") added++;
+    else if (row.type === "removed") removed++;
+    else if (row.type === "changed") changed++;
+  });
+
+  document.getElementById("diffSummary").innerHTML = `
+    <span>Kokku leitud erinevusi:</span>
+    <span class="sum-stat added-stat"><b>+${added}</b> lisatud rida</span>
+    <span class="sum-stat removed-stat"><b>−${removed}</b> eemaldatud rida</span>
+    <span class="sum-stat" style="color:#8a6b1a"><b>~${changed}</b> muudetud rida</span>
+  `;
+
+  // Render sides
+  const leftHtml = [];
+  const rightHtml = [];
+  diff.forEach(row => {
+    if (row.type === "same") {
+      leftHtml.push(renderDiffLine(row.leftNum, row.leftLine, ""));
+      rightHtml.push(renderDiffLine(row.rightNum, row.rightLine, ""));
+    } else if (row.type === "added") {
+      leftHtml.push(renderDiffLine("", "", "placeholder"));
+      rightHtml.push(renderDiffLine(row.rightNum, row.rightLine, "added"));
+    } else if (row.type === "removed") {
+      leftHtml.push(renderDiffLine(row.leftNum, row.leftLine, "removed"));
+      rightHtml.push(renderDiffLine("", "", "placeholder"));
+    } else if (row.type === "changed") {
+      const [leftMarked, rightMarked] = wordDiff(row.leftLine, row.rightLine);
+      leftHtml.push(renderDiffLine(row.leftNum, leftMarked, "changed", true));
+      rightHtml.push(renderDiffLine(row.rightNum, rightMarked, "changed", true));
+    }
+  });
+
+  document.getElementById("diffLeftCode").innerHTML  = leftHtml.join("");
+  document.getElementById("diffRightCode").innerHTML = rightHtml.join("");
+
+  // Edit active link
+  const active = state.versions.find(v => v.active);
+  if (active && state.originalCode) {
+    document.getElementById("diffEditBtn").href =
+      "valem-editor.html?code=" + encodeURIComponent(state.originalCode);
+  }
+
+  // Sync scroll between the two panes
+  const L = document.querySelector(".diff-side.left");
+  const R = document.querySelector(".diff-side.right");
+  let syncing = false;
+  function syncFrom(src, dst) {
+    return () => {
+      if (syncing) return;
+      syncing = true;
+      dst.scrollTop = src.scrollTop;
+      setTimeout(() => syncing = false, 5);
+    };
+  }
+  L.onscroll = syncFrom(L, R);
+  R.onscroll = syncFrom(R, L);
+
+  document.getElementById("diffModal").classList.add("show");
+}
+
+function renderDiffLine(num, content, cls, isHtml = false) {
+  const c = isHtml ? content : escapeHtml(content);
+  return `<div class="diff-line ${cls}"><span class="ln-num">${num}</span><span class="ln-content">${c || " "}</span></div>`;
+}
+
+function closeDiff() {
+  document.getElementById("diffModal").classList.remove("show");
+}
+
+/* ============================================================
+   Simple line-based diff using LCS
+   ============================================================ */
+function computeLineDiff(left, right) {
+  // Build LCS matrix
+  const m = left.length, n = right.length;
+  const dp = Array.from({length: m + 1}, () => new Array(n + 1).fill(0));
+  for (let i = m - 1; i >= 0; i--) {
+    for (let j = n - 1; j >= 0; j--) {
+      if (left[i] === right[j]) dp[i][j] = dp[i+1][j+1] + 1;
+      else dp[i][j] = Math.max(dp[i+1][j], dp[i][j+1]);
+    }
+  }
+  // Walk to produce rows
+  const rows = [];
+  let i = 0, j = 0;
+  while (i < m && j < n) {
+    if (left[i] === right[j]) {
+      rows.push({ type: "same", leftNum: i+1, rightNum: j+1, leftLine: left[i], rightLine: right[j] });
+      i++; j++;
+    } else if (dp[i+1][j] >= dp[i][j+1]) {
+      rows.push({ type: "removed", leftNum: i+1, leftLine: left[i] });
+      i++;
+    } else {
+      rows.push({ type: "added", rightNum: j+1, rightLine: right[j] });
+      j++;
+    }
+  }
+  while (i < m) { rows.push({ type: "removed", leftNum: i+1, leftLine: left[i] }); i++; }
+  while (j < n) { rows.push({ type: "added", rightNum: j+1, rightLine: right[j] }); j++; }
+
+  // Post-process: pair adjacent removed+added as "changed" (for prettier side-by-side)
+  const out = [];
+  let k = 0;
+  while (k < rows.length) {
+    if (rows[k].type === "removed" && k + 1 < rows.length && rows[k+1].type === "added") {
+      out.push({
+        type: "changed",
+        leftNum: rows[k].leftNum,
+        rightNum: rows[k+1].rightNum,
+        leftLine: rows[k].leftLine,
+        rightLine: rows[k+1].rightLine
+      });
+      k += 2;
+    } else {
+      out.push(rows[k]);
+      k++;
+    }
+  }
+  return out;
+}
+
+/* ============================================================
+   Word-level diff within a changed line
+   ============================================================ */
+function wordDiff(a, b) {
+  // Tokenize by word boundaries and whitespace
+  const split = s => s.split(/(\s+|[.,;:()\[\]{}'"`=<>+\-*\/!?&|])/).filter(x => x !== "");
+  const A = split(a), B = split(b);
+  const m = A.length, n = B.length;
+  const dp = Array.from({length: m + 1}, () => new Array(n + 1).fill(0));
+  for (let i = m - 1; i >= 0; i--)
+    for (let j = n - 1; j >= 0; j--) {
+      if (A[i] === B[j]) dp[i][j] = dp[i+1][j+1] + 1;
+      else dp[i][j] = Math.max(dp[i+1][j], dp[i][j+1]);
+    }
+  const left = [], right = [];
+  let i = 0, j = 0;
+  while (i < m && j < n) {
+    if (A[i] === B[j]) { left.push(escapeHtml(A[i])); right.push(escapeHtml(B[j])); i++; j++; }
+    else if (dp[i+1][j] >= dp[i][j+1]) { left.push(`<span class="word-del">${escapeHtml(A[i])}</span>`); i++; }
+    else { right.push(`<span class="word-add">${escapeHtml(B[j])}</span>`); j++; }
+  }
+  while (i < m) { left.push(`<span class="word-del">${escapeHtml(A[i])}</span>`); i++; }
+  while (j < n) { right.push(`<span class="word-add">${escapeHtml(B[j])}</span>`); j++; }
+  return [left.join(""), right.join("")];
 }
 
 function deleteVersion(i) {
@@ -1544,14 +2018,22 @@ function toast(msg, kind) {
 
 // Escape key closes modal
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && document.getElementById("trigModal").classList.contains("show")) {
-    closeTrigger();
+  if (e.key === "Escape") {
+    if (document.getElementById("trigModal").classList.contains("show")) {
+      closeTrigger();
+    }
+    if (document.getElementById("diffModal").classList.contains("show")) {
+      closeDiff();
+    }
   }
 });
 
 // Click outside modal closes it
 document.getElementById("trigModal").addEventListener("click", (e) => {
   if (e.target === document.getElementById("trigModal")) closeTrigger();
+});
+document.getElementById("diffModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("diffModal")) closeDiff();
 });
 
 // Warn on unload if dirty
