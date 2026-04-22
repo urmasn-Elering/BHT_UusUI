@@ -17,21 +17,22 @@
     --ink-400: #8a9aa0;
     --line: #d8dfe2;
     --line-soft: #e9edef;
-    --bg: #ffffff;
     --bg-zebra: #f6f8f9;
-    --bg-sidebar: #ffffff;
     --green-600: #1f8a55;
     --green-500: #2e9b61;
     --green-050: #e9f6ee;
+    --green-100: #b7e0c9;
     --amber-050: #fff6db;
     --amber-500: #e0a81b;
     --red-500: #c8394a;
+    --red-050: #fcecee;
     --radius: 4px;
     --radius-lg: 6px;
     --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-pop: 0 10px 32px rgba(0,30,40,.15), 0 2px 8px rgba(0,30,40,.06);
     --focus: 0 0 0 3px rgba(0,123,143,.2);
+    --mono: "JetBrains Mono", "SFMono-Regular", "Menlo", ui-monospace, monospace;
   }
-
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0; height: 100%;
@@ -40,425 +41,471 @@
     color: var(--ink-900);
     background: #fff;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
   button { font-family: inherit; font-size: inherit; cursor: pointer; }
   a { color: var(--teal-700); text-decoration: none; }
 
-  /* Icons */
   .icon {
     display: inline-block;
     width: 16px; height: 16px;
     vertical-align: middle;
-    stroke-width: 1.75;
-    stroke: currentColor;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    stroke-width: 1.75; stroke: currentColor; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
     flex-shrink: 0;
   }
-  .icon-sm { width: 14px; height: 14px; }
-  .icon-lg { width: 18px; height: 18px; }
+  .icon-sm { width: 13px; height: 13px; }
+  .icon-xs { width: 11px; height: 11px; }
 
-  /* ============ HEADER ============ */
+  /* =========================================== TOPBAR */
   .topbar {
-    height: 48px;
-    background: var(--teal-900);
-    color: #fff;
-    display: flex; align-items: center;
-    padding: 0 20px;
-    gap: 24px;
+    height: 48px; background: var(--teal-900); color: #fff;
+    display: flex; align-items: center; padding: 0 20px; gap: 24px;
   }
   .brand { display: flex; align-items: center; gap: 14px; }
-  .brand svg { display: block; }
-  .brand-sub {
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    color: rgba(255,255,255,.92);
-    font-weight: 400;
-  }
+  .brand-sub { font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,.92); }
   .topbar-right {
-    margin-left: auto;
-    display: flex; align-items: center; gap: 22px;
-    font-size: 13px;
+    margin-left: auto; display: flex; align-items: center; gap: 22px; font-size: 13px;
   }
   .topbar-right .item {
     display: inline-flex; align-items: center; gap: 7px;
-    color: #fff;
-    cursor: pointer;
-    white-space: nowrap;
+    color: #fff; cursor: pointer; white-space: nowrap;
   }
-  .topbar-right .item:hover { opacity: .85; }
-  .topbar-right .sep {
-    width: 1px; height: 20px; background: rgba(255,255,255,.2);
-  }
+  .topbar-right .sep { width: 1px; height: 20px; background: rgba(255,255,255,.2); }
 
-  /* ============ LAYOUT ============ */
-  .layout {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    min-height: calc(100vh - 48px);
-  }
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 48px); }
 
-  /* ============ SIDEBAR ============ */
-  .sidebar {
-    background: var(--bg-sidebar);
-    border-right: 1px solid var(--line);
-    padding: 18px 0;
-  }
+  /* =========================================== SIDEBAR */
+  .sidebar { background: #fff; border-right: 1px solid var(--line); padding: 18px 0; }
   .side-back {
     display: flex; align-items: center; gap: 6px;
-    padding: 8px 20px;
-    color: var(--ink-700);
-    font-weight: 600;
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    cursor: pointer;
+    padding: 8px 20px; color: var(--ink-700);
+    font-weight: 600; font-size: 11.5px; letter-spacing: 0.08em; cursor: pointer;
   }
-  .side-back:hover { color: var(--teal-700); }
   .side-item {
-    display: block;
-    padding: 9px 20px 9px 36px;
-    font-size: 13px;
-    color: var(--ink-700);
-    border-left: 3px solid transparent;
-    cursor: pointer;
+    display: block; padding: 9px 20px 9px 36px;
+    font-size: 13px; color: var(--ink-700);
+    border-left: 3px solid transparent; cursor: pointer; text-decoration: none;
   }
   .side-item:hover { background: var(--teal-050); color: var(--teal-800); }
   .side-item.active {
-    background: var(--teal-050);
-    color: var(--teal-800);
-    border-left-color: var(--teal-700);
-    font-weight: 600;
+    background: var(--teal-050); color: var(--teal-800);
+    border-left-color: var(--teal-700); font-weight: 600;
   }
 
-  /* ============ MAIN ============ */
-  .main {
-    padding: 20px 24px 40px;
-    min-width: 0;
-  }
+  /* =========================================== MAIN */
+  .main { padding: 20px 24px 40px; min-width: 0; }
 
   .page-head {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 14px;
   }
-  .page-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--ink-900);
-    margin: 0;
-    letter-spacing: -0.01em;
-  }
+  .page-title { font-size: 20px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
   .page-actions { display: flex; gap: 10px; }
 
-  /* Buttons */
   .btn {
     display: inline-flex; align-items: center; gap: 6px;
-    height: 34px;
-    padding: 0 14px;
-    border-radius: var(--radius);
-    border: 1px solid transparent;
-    font-size: 13px; font-weight: 500;
-    transition: background .12s, border-color .12s, color .12s;
-    background: #fff;
-    color: var(--ink-900);
+    height: 34px; padding: 0 14px; border-radius: var(--radius);
+    border: 1px solid transparent; font-size: 13px; font-weight: 500;
+    background: #fff; color: var(--ink-900);
+    transition: background .12s, border-color .12s;
   }
-  .btn:focus-visible { outline: none; box-shadow: var(--focus); }
-
-  .btn-primary {
-    background: var(--teal-700); color: #fff; border-color: var(--teal-700);
-  }
-  .btn-primary:hover { background: var(--teal-800); border-color: var(--teal-800); }
-
-  .btn-secondary {
-    background: #fff; color: var(--teal-700); border-color: var(--teal-700);
-  }
+  .btn-primary { background: var(--teal-700); color: #fff; border-color: var(--teal-700); }
+  .btn-primary:hover { background: var(--teal-800); }
+  .btn-secondary { background: #fff; color: var(--teal-700); border-color: var(--teal-700); }
   .btn-secondary:hover { background: var(--teal-050); }
 
-  /* Filter bar */
+  /* =========================================== FILTER BAR */
   .filter-bar {
-    display: flex; align-items: center; gap: 16px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    padding: 12px 14px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 12px; margin-bottom: 14px;
   }
-  .field { display: flex; align-items: center; gap: 8px; }
-  .field-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-700);
-    letter-spacing: 0.02em;
-  }
+  .filter-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  /* Big unified search */
   .search-wrap {
     position: relative;
-    flex: 1 1 280px;
-    min-width: 220px;
+    flex: 1 1 500px; min-width: 340px;
   }
   .search-wrap .search-icon {
-    position: absolute; top: 50%; left: 10px; transform: translateY(-50%);
+    position: absolute; top: 50%; left: 12px; transform: translateY(-50%);
     color: var(--ink-400); pointer-events: none;
   }
-  .input, .select {
-    height: 34px;
-    width: 100%;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 0 12px;
-    font-size: 13px;
-    color: var(--ink-900);
-    background: #fff;
-    font-family: inherit;
+  .search-wrap .help-btn {
+    position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+    width: 26px; height: 26px; border-radius: 4px;
+    background: transparent; border: 0;
+    color: var(--ink-500); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
   }
-  .input:focus, .select:focus { outline: none; border-color: var(--teal-700); box-shadow: var(--focus); }
-  .search-wrap .input { padding-left: 34px; }
+  .search-wrap .help-btn:hover { color: var(--teal-700); background: var(--teal-050); }
+  .search-wrap .clear-btn {
+    position: absolute; top: 50%; right: 38px; transform: translateY(-50%);
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--line); border: 0;
+    color: var(--ink-700); cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+  }
+  .search-wrap.has-value .clear-btn { display: inline-flex; }
+  .search-wrap .clear-btn:hover { background: var(--ink-400); color: #fff; }
+  .search-wrap .kbd-hint {
+    position: absolute; top: 50%; right: 68px; transform: translateY(-50%);
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-400); background: var(--line-soft);
+    padding: 2px 6px; border-radius: 3px; border: 1px solid var(--line);
+    pointer-events: none;
+  }
+  .search-wrap.has-focus .kbd-hint, .search-wrap.has-value .kbd-hint { display: none; }
 
-  .select-wrap {
-    position: relative;
-    min-width: 180px;
+  #searchInput {
+    width: 100%; height: 40px;
+    padding: 0 98px 0 40px;
+    border: 1px solid var(--line); border-radius: var(--radius);
+    background: #fff;
+    font-size: 13.5px;
+    font-family: var(--mono);
+    color: var(--ink-900);
   }
-  .select-wrap .chev-icon {
-    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    color: var(--ink-500); pointer-events: none;
+  #searchInput:focus {
+    outline: none; border-color: var(--teal-700); box-shadow: var(--focus);
+  }
+  #searchInput::placeholder { color: var(--ink-400); font-family: var(--mono); }
+
+  .small-filters { display: flex; align-items: center; gap: 12px; }
+  .field { display: flex; align-items: center; gap: 6px; }
+  .field-label {
+    font-size: 11.5px; font-weight: 600; color: var(--ink-700); letter-spacing: 0.02em;
   }
   .select {
+    height: 34px; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 0 28px 0 10px; font-size: 13px; font-family: inherit;
     appearance: none; -webkit-appearance: none;
-    padding-right: 30px;
+    background: #fff
+      url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7c83' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l6 6l6 -6'/%3e%3c/svg%3e")
+      no-repeat right 8px center;
+    min-width: 140px;
     cursor: pointer;
   }
+  .select:focus { outline: none; border-color: var(--teal-700); box-shadow: var(--focus); }
 
   /* Toggle */
-  .toggle-wrap {
-    margin-left: auto;
-    display: flex; align-items: center; gap: 10px;
-  }
+  .toggle-wrap { display: flex; align-items: center; gap: 8px; margin-left: auto; }
   .toggle {
-    position: relative;
-    width: 36px; height: 20px;
-    background: #c4cdd1;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background .15s;
+    position: relative; width: 32px; height: 18px;
+    background: #c4cdd1; border-radius: 999px; cursor: pointer;
   }
   .toggle::after {
-    content: "";
-    position: absolute; top: 2px; left: 2px;
-    width: 16px; height: 16px;
-    background: #fff; border-radius: 50%;
-    transition: left .15s;
-    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    content: ""; position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; background: #fff; border-radius: 50%;
+    transition: left .15s; box-shadow: 0 1px 2px rgba(0,0,0,.2);
   }
   .toggle.on { background: var(--teal-700); }
-  .toggle.on::after { left: 18px; }
+  .toggle.on::after { left: 16px; }
   .toggle-wrap label { font-size: 13px; color: var(--ink-700); cursor: pointer; user-select: none; }
 
-  /* ============ TABLE ============ */
-  .table-wrap {
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: #fff;
-    box-shadow: var(--shadow-sm);
+  /* Parsed query preview row */
+  .parsed-row {
+    display: none;
+    align-items: center; gap: 6px; flex-wrap: wrap;
+    padding-top: 10px; margin-top: 10px;
+    border-top: 1px dashed var(--line);
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+  .parsed-row.show { display: flex; }
+  .parsed-row .plabel {
+    font-size: 11px; font-weight: 600; color: var(--ink-500);
+    letter-spacing: 0.04em; text-transform: uppercase; margin-right: 4px;
   }
-  thead th {
-    background: var(--teal-900);
-    color: #fff;
-    font-weight: 600;
-    font-size: 11.5px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-align: left;
-    padding: 11px 12px;
-    white-space: nowrap;
-    user-select: none;
+  .qtoken {
+    display: inline-flex; align-items: center;
+    height: 24px; border-radius: 4px;
+    font-family: var(--mono); font-size: 11.5px;
+    overflow: hidden; border: 1px solid;
   }
-  thead th .sort {
-    display: inline-flex; vertical-align: middle;
-    margin-left: 6px;
-    color: rgba(255,255,255,.55);
+  .qtoken.text {
+    background: #f5eedb; border-color: #e8d8a7; color: #8a6b1a;
+  }
+  .qtoken.filter {
+    background: var(--teal-050); border-color: var(--teal-100); color: var(--teal-800);
+  }
+  .qtoken .k { padding: 0 2px 0 8px; font-weight: 600; }
+  .qtoken .op { padding: 0 2px; color: var(--ink-500); }
+  .qtoken .v { padding: 0 2px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-900); }
+  .qtoken .text-v { padding: 0 8px; }
+  .qtoken .regex-tag {
+    background: var(--teal-700); color: #fff;
+    padding: 1px 4px; font-size: 9px; border-radius: 3px;
+    margin: 0 4px 0 2px; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .qtoken .qt-remove {
+    background: transparent; border: 0; height: 100%; padding: 0 6px 0 2px;
+    color: inherit; opacity: .6; cursor: pointer;
+    display: inline-flex; align-items: center;
+  }
+  .qtoken .qt-remove:hover { opacity: 1; color: var(--red-500); }
+
+  /* =========================================== SYNTAX HELP POPOVER */
+  .syntax-pop {
+    position: absolute; z-index: 50;
+    width: 420px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-pop); padding: 16px;
+    display: none;
+  }
+  .syntax-pop.show { display: block; }
+  .syntax-pop h4 {
+    margin: 0 0 10px; font-size: 13px; color: var(--ink-900);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .syntax-pop .sub {
+    font-size: 11.5px; font-weight: 600; color: var(--ink-500);
+    text-transform: uppercase; letter-spacing: 0.04em;
+    margin: 12px 0 6px;
+  }
+  .syntax-pop .syn-example {
+    display: flex; justify-content: space-between; gap: 10px;
+    padding: 5px 0; font-size: 12px;
+    border-bottom: 1px dashed var(--line-soft);
+  }
+  .syntax-pop .syn-example:last-child { border-bottom: 0; }
+  .syntax-pop code {
+    font-family: var(--mono); font-size: 11.5px;
+    background: var(--teal-050); color: var(--teal-800);
+    padding: 1px 6px; border-radius: 3px;
+    border: 1px solid var(--teal-100);
     cursor: pointer;
   }
-  thead th .sort:hover { color: #fff; }
-  thead th.sorted .sort { color: #fff; }
+  .syntax-pop code:hover { background: var(--teal-100); }
+  .syntax-pop .desc { color: var(--ink-500); flex: 1; text-align: right; font-size: 11.5px; }
+  .syntax-pop .meta-keys {
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .syntax-pop .meta-key {
+    font-family: var(--mono); font-size: 11px;
+    background: #fff; border: 1px solid var(--line);
+    padding: 2px 7px; border-radius: 3px;
+    cursor: pointer;
+    color: var(--ink-700);
+  }
+  .syntax-pop .meta-key:hover { background: var(--teal-050); color: var(--teal-800); border-color: var(--teal-100); }
 
+  /* Typeahead */
+  .typeahead {
+    position: absolute; z-index: 40;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-pop); padding: 4px 0;
+    display: none; max-height: 240px; overflow: auto;
+    min-width: 260px;
+  }
+  .typeahead.show { display: block; }
+  .ta-item {
+    padding: 7px 12px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12.5px;
+  }
+  .ta-item.hl, .ta-item:hover { background: var(--teal-050); color: var(--teal-800); }
+  .ta-item .ta-key { font-family: var(--mono); font-weight: 500; }
+  .ta-item .ta-meta { font-size: 11px; color: var(--ink-500); }
+
+  /* =========================================== RESULT AREA */
+  .result-summary {
+    font-size: 12.5px; color: var(--ink-500); margin-bottom: 8px;
+  }
+  .result-summary strong { color: var(--ink-900); }
+
+  .table-wrap {
+    border: 1px solid var(--line); border-radius: var(--radius-lg);
+    overflow: hidden; background: #fff; box-shadow: var(--shadow-sm);
+  }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  thead th {
+    background: var(--teal-900); color: #fff;
+    font-weight: 600; font-size: 11.5px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    text-align: left; padding: 11px 12px; white-space: nowrap;
+  }
+  thead th .sort {
+    display: inline-flex; vertical-align: middle; margin-left: 6px;
+    color: rgba(255,255,255,.55); cursor: pointer;
+  }
+  thead th .sort:hover { color: #fff; }
   tbody td {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 10px 12px; font-size: 13px;
     color: var(--ink-900);
     border-top: 1px solid var(--line-soft);
     vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   tbody tr:nth-child(odd) td { background: var(--bg-zebra); }
   tbody tr:hover td { background: var(--teal-050); }
   tbody tr.expanded td { background: #fff !important; }
-
   tbody tr.child-row td {
     background: #fff !important;
-    color: var(--ink-500);
-    font-size: 12.5px;
+    color: var(--ink-500); font-size: 12.5px;
     padding: 7px 12px;
     border-top: 1px dashed var(--line-soft);
   }
-  tbody tr.child-row td:nth-child(2) { padding-left: 48px; }
-  tbody tr.child-row.active td {
-    color: var(--green-600);
-    font-weight: 600;
-  }
-  tbody tr.child-row:hover td { background: #f3faf6 !important; }
-
+  tbody tr.child-row.active td { color: var(--green-600); font-weight: 600; }
   tbody tr.row-warn td { background: var(--amber-050) !important; }
-  tbody tr.row-warn:hover td { background: #fff1c4 !important; }
 
-  .row-index {
-    color: var(--ink-400);
-    font-variant-numeric: tabular-nums;
-    font-size: 12px;
-  }
+  /* Highlight rows that were matched by trigger-rule filter */
+  tbody tr.filter-match td { box-shadow: inset 3px 0 0 var(--teal-700); }
+
+  .row-index { color: var(--ink-400); font-variant-numeric: tabular-nums; font-size: 12px; }
 
   .expand-btn {
     background: none; border: none; padding: 0;
     width: 20px; height: 20px;
     display: inline-flex; align-items: center; justify-content: center;
-    color: var(--ink-700);
-    margin-right: 4px;
-    vertical-align: middle;
+    color: var(--ink-700); margin-right: 4px;
   }
   .expand-btn:hover { color: var(--teal-700); }
   .expand-btn .icon { transition: transform .15s; }
   tr.expanded .expand-btn .icon { transform: rotate(90deg); }
 
-  .code-cell {
-    font-family: "JetBrains Mono", "Menlo", ui-monospace, monospace;
-    font-size: 12.5px;
-    color: var(--ink-900);
-    font-weight: 500;
-  }
-  .code-wrap {
-    display: inline-flex; align-items: center; gap: 4px;
-    vertical-align: middle;
-  }
+  .code-cell { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--ink-900); }
+  a.code-cell:hover { color: var(--teal-700); text-decoration: underline; text-underline-offset: 3px; }
+  a.btn, a.add-formula-btn, a.icon-btn { text-decoration: none; }
+  a.btn:hover, a.add-formula-btn:hover, a.icon-btn:hover { text-decoration: none; }
+  .code-wrap { display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
 
   .chip {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 500;
-    background: var(--teal-050);
-    color: var(--teal-800);
+    display: inline-block; padding: 2px 8px;
+    border-radius: 999px; font-size: 11.5px; font-weight: 500;
+    background: var(--teal-050); color: var(--teal-800);
     border: 1px solid var(--teal-100);
   }
 
-  /* Actions */
-  .row-actions {
-    display: flex; align-items: center; gap: 4px;
-    justify-content: flex-end;
+  /* TRIGGER cell content */
+  tbody td.trig-cell { white-space: normal; }
+  .trig-list { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+  .trig-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 4px;
+    font-family: var(--mono); font-size: 11.5px;
+    background: #fff; border: 1px solid var(--line);
+    color: var(--ink-700);
+    cursor: pointer;
   }
+  .trig-chip:hover { border-color: var(--teal-700); color: var(--teal-700); }
+  .trig-chip.matched {
+    background: var(--green-050); border-color: var(--green-100); color: var(--green-600);
+    font-weight: 500;
+  }
+  .trig-chip.matched:hover { border-color: var(--green-500); }
+  .trig-chip .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink-400);
+  }
+  .trig-chip.matched .dot { background: var(--green-500); }
+  .trig-more {
+    font-size: 11px; color: var(--ink-500);
+    padding: 2px 6px; cursor: pointer;
+  }
+  .trig-more:hover { color: var(--teal-700); text-decoration: underline; }
+  .trig-none { color: var(--ink-400); font-size: 11.5px; }
+
+  /* Trigger detail popover (shows rules of one trigger) */
+  .trig-detail {
+    position: absolute; z-index: 45;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-pop);
+    padding: 12px; min-width: 320px; max-width: 460px;
+    display: none;
+  }
+  .trig-detail.show { display: block; }
+  .trig-detail h5 {
+    margin: 0 0 8px; font-family: var(--mono); font-size: 13px; color: var(--ink-900);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .trig-detail .close {
+    background: transparent; border: 0; color: var(--ink-500); cursor: pointer;
+    width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+  }
+  .trig-detail .close:hover { color: var(--red-500); background: var(--red-050); }
+  .trig-detail table { font-size: 12px; }
+  .trig-detail table th {
+    background: transparent; color: var(--ink-500); font-weight: 600;
+    padding: 6px 4px; border-bottom: 1px solid var(--line-soft);
+    text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em;
+  }
+  .trig-detail table td {
+    padding: 6px 4px; background: transparent !important;
+    border-top: 1px solid var(--line-soft);
+    font-family: var(--mono); font-size: 11.5px;
+    white-space: normal; word-break: break-all;
+  }
+  .trig-detail .rule-matched td { color: var(--green-600); font-weight: 500; background: var(--green-050) !important; }
+  .trig-detail .re-badge {
+    display: inline-block; padding: 1px 4px; background: var(--teal-700); color: #fff;
+    font-size: 9px; border-radius: 3px; font-weight: 600;
+  }
+
+  /* Actions */
+  .row-actions { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
   .icon-btn {
     width: 28px; height: 28px;
     display: inline-flex; align-items: center; justify-content: center;
     background: transparent; border: 1px solid transparent;
-    border-radius: var(--radius);
-    color: var(--ink-500);
-    transition: color .12s, background .12s, border-color .12s;
-    padding: 0;
+    border-radius: var(--radius); color: var(--ink-500); padding: 0;
   }
   .icon-btn:hover { color: var(--teal-700); background: var(--teal-050); }
-  .icon-btn.danger:hover { color: var(--red-500); background: #fcecee; }
-
+  .icon-btn.danger:hover { color: var(--red-500); background: var(--red-050); }
   .log-btn {
-    height: 26px;
-    padding: 0 10px;
-    border-radius: var(--radius);
-    background: var(--teal-700);
-    color: #fff;
-    border: 1px solid var(--teal-700);
-    font-size: 11.5px;
-    font-weight: 500;
+    height: 26px; padding: 0 10px; border-radius: var(--radius);
+    background: var(--teal-700); color: #fff; border: 1px solid var(--teal-700);
+    font-size: 11.5px; font-weight: 500;
     display: inline-flex; align-items: center; gap: 4px;
   }
   .log-btn:hover { background: var(--teal-800); }
-
   .add-formula-btn {
-    height: 26px;
-    padding: 0 10px;
-    border-radius: var(--radius);
-    background: #fff;
-    color: var(--teal-700);
-    border: 1px solid var(--teal-700);
-    font-size: 11.5px;
-    font-weight: 500;
-    display: inline-flex; align-items: center; gap: 4px;
-    white-space: nowrap;
+    height: 26px; padding: 0 10px; border-radius: var(--radius);
+    background: #fff; color: var(--teal-700); border: 1px solid var(--teal-700);
+    font-size: 11.5px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
   }
   .add-formula-btn:hover { background: var(--teal-050); }
 
-  /* Footer pagination */
+  /* Footer */
   .table-footer {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 14px;
-    border-top: 1px solid var(--line-soft);
-    background: #fff;
-    font-size: 12.5px;
-    color: var(--ink-500);
+    padding: 12px 14px; border-top: 1px solid var(--line-soft);
+    background: #fff; font-size: 12.5px; color: var(--ink-500);
   }
   .pagination { display: flex; align-items: center; gap: 4px; }
   .page-btn {
     min-width: 28px; height: 28px;
-    border: 1px solid var(--line);
-    background: #fff;
-    border-radius: var(--radius);
-    color: var(--ink-700);
-    font-size: 12.5px;
+    border: 1px solid var(--line); background: #fff;
+    border-radius: var(--radius); color: var(--ink-700); font-size: 12.5px;
     padding: 0 8px;
     display: inline-flex; align-items: center; justify-content: center;
   }
-  .page-btn:hover:not(:disabled):not(.active) { background: var(--teal-050); border-color: var(--teal-700); color: var(--teal-700); }
   .page-btn.active { background: var(--teal-700); border-color: var(--teal-700); color: #fff; }
   .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .inline-desc { color: var(--ink-500); font-size: 12.5px; }
+
+  /* Empty state */
+  .empty-state {
+    padding: 40px 20px; text-align: center; color: var(--ink-500);
+  }
+  .empty-state .icon { color: var(--ink-400); width: 32px; height: 32px; margin-bottom: 8px; }
 
   /* Toast */
   .toast {
     position: fixed; bottom: 24px; right: 24px;
-    background: #fff;
-    border: 1px solid var(--line);
+    background: #fff; border: 1px solid var(--line);
     border-left: 4px solid var(--teal-700);
-    padding: 12px 16px;
-    border-radius: var(--radius-lg);
+    padding: 12px 16px; border-radius: var(--radius-lg);
     box-shadow: 0 8px 24px rgba(0,0,0,.12);
-    display: none;
-    font-size: 13px;
-    gap: 10px; align-items: center;
-    z-index: 100;
-    max-width: 340px;
+    display: none; font-size: 13px; gap: 10px; align-items: center; z-index: 200;
   }
-  .toast.show { display: flex; animation: slideIn .25s ease; }
+  .toast.show { display: flex; }
   .toast .icon { color: var(--teal-700); }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .inline-desc { color: var(--ink-500); font-size: 12.5px; }
-
-  @media (max-width: 1100px) {
-    .layout { grid-template-columns: 180px 1fr; }
-  }
 </style>
 </head>
 <body>
 
-<!-- ============ SVG SPRITE ============ -->
+<!-- SVG sprite -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6"/></symbol>
@@ -477,10 +524,13 @@
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></symbol>
     <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></symbol>
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 17h.01"/><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6l-12 12"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></symbol>
   </defs>
 </svg>
 
-<!-- ============ TOP BAR ============ -->
+<!-- TOPBAR -->
 <header class="topbar">
   <div class="brand">
     <svg width="85" height="24" viewBox="0 0 85 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -505,94 +555,127 @@
 </header>
 
 <div class="layout">
-
-  <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar">
     <div class="side-back"><svg class="icon icon-sm"><use href="#i-chevron-left"/></svg>SEADED</div>
     <a class="side-item">Sõnumi väljad</a>
     <a class="side-item">Koodiloend</a>
     <a class="side-item active">Valemid</a>
-    <a class="side-item">Triggerid</a>
     <a class="side-item">Workflow'd</a>
     <a class="side-item">Mõõteühikud</a>
   </aside>
 
-  <!-- ============ MAIN ============ -->
   <main class="main">
-
     <div class="page-head">
       <h1 class="page-title">Valemid</h1>
       <div class="page-actions">
         <button class="btn btn-secondary" onclick="toast('Impordi vorm avaneks siin')"><svg class="icon"><use href="#i-upload"/></svg>Impordi</button>
-        <button class="btn btn-primary" onclick="toast('Uue valemi vorm avaneks siin')"><svg class="icon"><use href="#i-plus"/></svg>Lisa uus</button>
+        <a class="btn btn-primary" href="valem-detail.html"><svg class="icon"><use href="#i-plus"/></svg>Lisa uus</a>
       </div>
     </div>
 
-    <!-- Filter bar -->
+    <!-- FILTER BAR -->
     <div class="filter-bar">
-      <div class="search-wrap">
-        <svg class="icon search-icon"><use href="#i-search"/></svg>
-        <input id="searchInput" class="input" type="text" placeholder="Otsi koodi või kirjelduse järgi…">
-      </div>
-      <div class="field">
-        <span class="field-label">Tüüp</span>
-        <div class="select-wrap">
-          <select id="typeFilter" class="select">
-            <option>Kõik</option>
-            <option>Sõnum</option>
-            <option>Andmed</option>
-            <option>Teavitus</option>
-          </select>
-          <svg class="icon icon-sm chev-icon"><use href="#i-chevron-down"/></svg>
+      <div class="filter-top">
+        <div class="search-wrap" id="searchWrap">
+          <svg class="icon search-icon"><use href="#i-search"/></svg>
+          <input id="searchInput" type="text" spellcheck="false" autocomplete="off"
+                 placeholder="Otsi koodi, kirjeldust või triggeri reegleid — nt. message_type:A13 domain:~10T-FI-EE">
+          <span class="kbd-hint">⌘K</span>
+          <button class="clear-btn" id="clearBtn" onclick="clearSearch()" title="Tühjenda">
+            <svg class="icon icon-xs"><use href="#i-x"/></svg>
+          </button>
+          <button class="help-btn" id="helpBtn" onclick="toggleHelp(event)" title="Otsingu süntaks">
+            <svg class="icon"><use href="#i-help"/></svg>
+          </button>
+        </div>
+
+        <div class="small-filters">
+          <div class="field">
+            <span class="field-label">Tüüp</span>
+            <select id="typeFilter" class="select">
+              <option>Kõik</option><option>Sõnum</option><option>Andmed</option><option>Teavitus</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Workflow</span>
+            <select id="wfFilter" class="select">
+              <option>Kõik</option>
+              <option>RESERVE-mFRR</option>
+              <option>RESERVE-CALC</option>
+              <option>SETTLEMENT</option>
+              <option>OPPLAN-SYSPLAN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toggle-wrap">
+          <label for="activeToggle">Kuva aktiivsed</label>
+          <div id="activeToggle" class="toggle on" onclick="this.classList.toggle('on'); applyFilter();"></div>
         </div>
       </div>
-      <div class="field">
-        <span class="field-label">Workflow</span>
-        <div class="select-wrap">
-          <select id="wfFilter" class="select">
-            <option>Kõik</option>
-            <option>RESERVE-mFRR</option>
-            <option>RESERVE-CALC</option>
-            <option>SETTLEMENT</option>
-            <option>OPPLAN-SYSPLAN</option>
-          </select>
-          <svg class="icon icon-sm chev-icon"><use href="#i-chevron-down"/></svg>
-        </div>
-      </div>
-      <div class="toggle-wrap">
-        <label for="activeToggle">Kuva aktiivsed</label>
-        <div id="activeToggle" class="toggle on" onclick="this.classList.toggle('on')"></div>
+
+      <!-- Parsed query preview -->
+      <div class="parsed-row" id="parsedRow">
+        <span class="plabel">Parsitud:</span>
+        <div id="parsedTokens" style="display:contents"></div>
       </div>
     </div>
+
+    <!-- Syntax help popover -->
+    <div id="syntaxPop" class="syntax-pop" style="right:24px; top:230px;">
+      <h4><svg class="icon icon-sm"><use href="#i-bolt"/></svg> Otsingu süntaks</h4>
+
+      <div class="sub">Näited</div>
+      <div class="syn-example"><code onclick="insertExample(this)">SENDOUT</code><span class="desc">koodi/kirjelduse otsing</span></div>
+      <div class="syn-example"><code onclick="insertExample(this)">message_type:A13</code><span class="desc">triggeri reegel täpselt</span></div>
+      <div class="syn-example"><code onclick="insertExample(this)">domain:~10T-FI-EE</code><span class="desc">regex triggeri reeglile</span></div>
+      <div class="syn-example"><code onclick="insertExample(this)">message_type:A13 business_type:A25</code><span class="desc">mitu filtrit (AND)</span></div>
+      <div class="syn-example"><code onclick="insertExample(this)">CALC message_type:A37</code><span class="desc">tekst + triggeri reegel</span></div>
+
+      <div class="sub">Saadaolevad metakeyd</div>
+      <div class="meta-keys" id="metaKeyList"></div>
+
+      <div class="sub">Operaatorid</div>
+      <div class="syn-example"><code>key:value</code><span class="desc">täpne vastavus</span></div>
+      <div class="syn-example"><code>key:~regex</code><span class="desc">regex-muster</span></div>
+      <div class="syn-example"><code>key:!=value</code><span class="desc">erineb väärtusest</span></div>
+    </div>
+
+    <!-- Typeahead dropdown -->
+    <div id="typeahead" class="typeahead"></div>
+
+    <!-- Result summary -->
+    <div class="result-summary" id="resultSummary"></div>
 
     <!-- Table -->
     <div class="table-wrap">
       <table id="formulaTable">
         <colgroup>
-          <col style="width:44px">
-          <col style="width:260px">
+          <col style="width:40px">
+          <col style="width:220px">
           <col>
+          <col style="width:110px">
+          <col style="width:110px">
           <col style="width:130px">
-          <col style="width:130px">
-          <col style="width:170px">
-          <col style="width:280px">
+          <col style="width:210px">
+          <col style="width:240px">
         </colgroup>
         <thead>
           <tr>
             <th>#</th>
-            <th class="sorted">Kood <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th>Kood <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
             <th>Kirjeldus <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
             <th>Algus (EET) <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
             <th>Lõpp (EET) <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
             <th>Workflow <span class="sort"><svg class="icon icon-sm"><use href="#i-sort"/></svg></span></th>
+            <th>Triggerid</th>
             <th style="text-align:right">Tegevused</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
       </table>
-
       <div class="table-footer">
-        <span id="countLabel">Näitab 9 / 142 kirjet</span>
+        <span id="countLabel"></span>
         <div class="pagination">
           <button class="page-btn" disabled><svg class="icon icon-sm"><use href="#i-chevron-left"/></svg></button>
           <button class="page-btn active">1</button>
@@ -604,8 +687,21 @@
         </div>
       </div>
     </div>
-
   </main>
+</div>
+
+<!-- Trigger detail popover -->
+<div id="trigDetail" class="trig-detail">
+  <h5>
+    <span id="trigDetailName"></span>
+    <button class="close" onclick="closeTrigDetail()"><svg class="icon icon-sm"><use href="#i-x"/></svg></button>
+  </h5>
+  <table>
+    <thead>
+      <tr><th>Metakey</th><th>Metavalue</th><th style="width:40px">Rx</th></tr>
+    </thead>
+    <tbody id="trigDetailRules"></tbody>
+  </table>
 </div>
 
 <!-- Toast -->
@@ -615,7 +711,23 @@
 </div>
 
 <script>
-const rows = [
+/* ============================================================
+   Metakeys (in real app, from API)
+   ============================================================ */
+const KNOWN_KEYS = [
+  { k: "message_type",            desc: "A13, A01, A37 jne." },
+  { k: "business_type",           desc: "A25, B24, B74" },
+  { k: "domain",                  desc: "EIC domeeni kood" },
+  { k: "sender_identification",   desc: "EIC saatja kood" },
+  { k: "receiver_identification", desc: "EIC saaja kood" },
+  { k: "process_type",            desc: "A01, A02, A46 …" },
+  { k: "acquiring_area",          desc: "EIC ala kood" }
+];
+
+/* ============================================================
+   Mock data — formulas now have associated triggers
+   ============================================================ */
+const FORMULAS = [
   {
     code: "SENDOUT_TSOMOL",
     descr: "A37 välja saatmine läbi TSO MOL",
@@ -624,80 +736,319 @@ const rows = [
     workflow: "RESERVE-mFRR",
     type: "Sõnum",
     warn: false,
+    triggers: [
+      { name: "SENDOUT_TSOMOL", active: true, rules: [
+        { key: "message_type", val: "A37" },
+        { key: "process_type", val: "A46" }
+      ]}
+    ],
     versions: [
       { start: "05.07.24 13:18", end: "31.12.80 10:55", active: true },
       { start: "10.02.20 08:57", end: "05.07.24 13:18", active: false },
-      { start: "19.04.18 00:00", end: "10.02.20 08:57", active: false },
-      { start: "12.03.18 09:44", end: "19.04.18 00:00", active: false },
-      { start: "29.11.17 11:57", end: "12.03.18 09:44", active: false }
+      { start: "19.04.18 00:00", end: "10.02.20 08:57", active: false }
     ]
   },
-  { code: "B21_BID_IN",            descr: "B21 sõnumi töötlus DATA staatusesse",            start: "12.02.24 15:03", end: "—",              workflow: "RESERVE-CALC",      type: "Sõnum",    warn: false },
-  { code: "A09_AC_DC_SCADA",       descr: "Kooperib ac, dc andmed SCADAst BHTsse",           start: "12.02.24 15:03", end: "—",              workflow: "—",                 type: "Andmed",   warn: false },
-  { code: "TEAVITUS",              descr: "ACT A40 tellimuse (A10) teavituse saatmine",      start: "12.02.24 15:03", end: "—",              workflow: "RESERVE-mFRR",      type: "Teavitus", warn: false },
-  { code: "AVP_Koond_ERALDATUD_V6RK_KUST", descr: "Arvutab EVP koondraporti eraldatud mahtude põhjal", start: "12.02.24 15:03", end: "—", workflow: "SETTLEMENT",   type: "Andmed",   warn: false },
-  { code: "aFRR_SETTLEMENT_ENERGY_UNIT_P", descr: "Arvutab aFRR energiamahud ühikute kaupa",  start: "12.02.24 15:03", end: "—",              workflow: "SETTLEMENT",        type: "Andmed",   warn: false },
-  { code: "A09_SYSPLAN_CONF",      descr: "Kontrollime, kas pärast A09 SYSPLAN saabumist …", start: "12.02.24 15:03", end: "—",              workflow: "OPPLAN-SYSPLAN",    type: "Sõnum",    warn: false },
-  { code: "A02_CALC_DEFAULT_ELR",  descr: "Arvutab ELER algväärtused vaikeseadete alusel",   start: "12.02.24 15:03", end: "—",              workflow: "—",                 type: "Andmed",   warn: false },
-  { code: "ESP_BH_A07_CONF_VANA",  descr: "BH summaarne määratud maht kinnituseks",          start: "12.02.24 15:03", end: "—",              workflow: "SETTLEMENT",        type: "Sõnum",    warn: true  }
+  {
+    code: "B21_BID_IN",
+    descr: "B21 sõnumi töötlus DATA staatusesse",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "RESERVE-CALC", type: "Sõnum", warn: false,
+    triggers: [
+      { name: "B21_BID_IN", active: true, rules: [
+        { key: "message_type", val: "B21" },
+        { key: "receiver_identification", val: "10X1001A1001A264" }
+      ]}
+    ]
+  },
+  {
+    code: "A09_AC_DC_SCADA",
+    descr: "Kooperib ac, dc andmed SCADAst BHTsse",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "—", type: "Andmed", warn: false,
+    triggers: []
+  },
+  {
+    code: "TEAVITUS",
+    descr: "ACT A40 tellimuse (A10) teavituse saatmine",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "RESERVE-mFRR", type: "Teavitus", warn: false,
+    triggers: [
+      { name: "TEAVITUS_A40", active: true, rules: [
+        { key: "message_type", val: "A40" },
+        { key: "business_type", val: "B74" }
+      ]}
+    ]
+  },
+  {
+    code: "A13_CALC_EEFI_BORDER",
+    descr: "Arvutab FG eri linkide failide baasil Eesti-Soome piiri TTC",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "RESERVE-mFRR", type: "Andmed", warn: false,
+    triggers: [
+      { name: "CALC_FG_EEFI", active: true, rules: [
+        { key: "message_type", val: "A13" },
+        { key: "business_type", val: "A25" },
+        { key: "domain", val: "(10T-FI-EE-00001Q)|(10T-FI-EE-00002O)", regex: true },
+        { key: "sender_identification", val: "10X1001A1001A264" }
+      ]}
+    ]
+  },
+  {
+    code: "A13_CALC_EEEL_BORDER",
+    descr: "Arvutab FG Eesti-Läti piiri TTC",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "RESERVE-mFRR", type: "Andmed", warn: false,
+    triggers: [
+      { name: "CALC_FG_EEEL", active: true, rules: [
+        { key: "message_type", val: "A13" },
+        { key: "business_type", val: "A25" },
+        { key: "domain", val: "(10T-EE-LV-.*)", regex: true }
+      ]}
+    ]
+  },
+  {
+    code: "aFRR_SETTLEMENT_ENERGY_UNIT_P",
+    descr: "Arvutab aFRR energiamahud ühikute kaupa",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "SETTLEMENT", type: "Andmed", warn: false,
+    triggers: [
+      { name: "aFRR_SETTLEMENT_ENERGY_UNIT_P", active: true, rules: [
+        { key: "message_type", val: "A25" },
+        { key: "process_type", val: "A02" }
+      ]}
+    ]
+  },
+  {
+    code: "A02_CALC_DEFAULT_ELR",
+    descr: "Arvutab ELER algväärtused vaikeseadete alusel",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "—", type: "Andmed", warn: false,
+    triggers: []
+  },
+  {
+    code: "ESP_BH_A07_CONF_VANA",
+    descr: "BH summaarne määratud maht kinnituseks",
+    start: "12.02.24 15:03", end: "—",
+    workflow: "SETTLEMENT", type: "Sõnum", warn: true,
+    triggers: [
+      { name: "ESP_BH_A07_CONF_VANA", active: false, rules: [
+        { key: "message_type", val: "A07" }
+      ]}
+    ]
+  }
 ];
 
-function ic(id, size){ return `<svg class="icon${size==='sm'?' icon-sm':''}"><use href="#i-${id}"/></svg>`; }
+/* ============================================================
+   Query parser
+   Supports: text tokens + key:value (with ~ for regex, != for neg)
+   ============================================================ */
+function parseQuery(q) {
+  if (!q || !q.trim()) return { text: [], filters: [] };
+  const text = [];
+  const filters = [];
+  // Tokenize respecting "quoted strings"
+  const toks = [];
+  const re = /"([^"]*)"|(\S+)/g;
+  let m;
+  while ((m = re.exec(q)) !== null) toks.push(m[1] || m[2]);
 
-function render(list) {
+  toks.forEach(t => {
+    const fm = t.match(/^([a-zA-Z_][\w]*):(.*)$/);
+    if (fm) {
+      const key = fm[1];
+      let val = fm[2];
+      let op = "eq";
+      if (val.startsWith("~"))  { op = "re";  val = val.slice(1); }
+      else if (val.startsWith("!=")) { op = "neq"; val = val.slice(2); }
+      if (val.length > 0) filters.push({ key, op, val });
+    } else {
+      text.push(t);
+    }
+  });
+  return { text, filters };
+}
+
+function ruleMatchesFilter(rule, f) {
+  if (rule.key !== f.key) return false;
+  switch (f.op) {
+    case "eq":  return rule.val === f.val || (rule.regex && new RegExp("^(?:"+rule.val+")$").test(f.val));
+    case "neq": return rule.val !== f.val;
+    case "re":
+      try { return new RegExp(f.val).test(rule.val); } catch { return false; }
+  }
+  return false;
+}
+
+function triggerMatches(trigger, filters) {
+  // trigger matches if every filter has at least one matching rule
+  return filters.every(f => trigger.rules.some(r => ruleMatchesFilter(r, f)));
+}
+
+function formulaMatches(formula, q) {
+  // text tokens: must all appear in code or description
+  for (const t of q.text) {
+    const lt = t.toLowerCase();
+    if (!(formula.code.toLowerCase().includes(lt) || formula.descr.toLowerCase().includes(lt))) return false;
+  }
+  // trigger filters: at least one trigger must satisfy ALL filters
+  if (q.filters.length > 0) {
+    if (!(formula.triggers || []).some(tr => triggerMatches(tr, q.filters))) return false;
+  }
+  return true;
+}
+
+/* ============================================================
+   Render
+   ============================================================ */
+const OP_SYM = { eq: "=", neq: "≠", re: "~" };
+
+function renderParsedTokens(q) {
+  const cont = document.getElementById("parsedTokens");
+  const row = document.getElementById("parsedRow");
+  if (q.text.length === 0 && q.filters.length === 0) {
+    row.classList.remove("show");
+    cont.innerHTML = "";
+    return;
+  }
+  row.classList.add("show");
+  const parts = [];
+  q.text.forEach(t => {
+    parts.push(`<span class="qtoken text"><span class="text-v">tekst: "${escapeHtml(t)}"</span>
+      <button class="qt-remove" onclick="removeToken('text', ${JSON.stringify(t).replace(/"/g,'&quot;')})"><svg class="icon icon-xs"><use href="#i-x"/></svg></button></span>`);
+  });
+  q.filters.forEach(f => {
+    parts.push(`<span class="qtoken filter">
+      <span class="k">${escapeHtml(f.key)}</span><span class="op">${OP_SYM[f.op]||"="}</span><span class="v">${escapeHtml(f.val)}</span>
+      ${f.op === "re" ? '<span class="regex-tag">RE</span>' : ''}
+      <button class="qt-remove" onclick="removeToken('filter', ${JSON.stringify(f).replace(/"/g,'&quot;')})"><svg class="icon icon-xs"><use href="#i-x"/></svg></button>
+    </span>`);
+  });
+  cont.innerHTML = parts.join("");
+}
+
+function removeToken(kind, tok) {
+  const input = document.getElementById("searchInput");
+  const parts = input.value.match(/"[^"]*"|\S+/g) || [];
+  let newParts;
+  if (kind === "text") {
+    // remove first token that is plain text equal to tok
+    const target = tok;
+    let removed = false;
+    newParts = parts.filter(p => {
+      if (removed) return true;
+      const noQuotes = p.startsWith('"') ? p.slice(1,-1) : p;
+      if (!p.match(/^[a-zA-Z_][\w]*:/) && noQuotes === target) { removed = true; return false; }
+      return true;
+    });
+  } else {
+    const target = tok;
+    let removed = false;
+    newParts = parts.filter(p => {
+      if (removed) return true;
+      const fm = p.match(/^([a-zA-Z_][\w]*):(.*)$/);
+      if (fm) {
+        const key = fm[1]; let val = fm[2]; let op = "eq";
+        if (val.startsWith("~"))  { op = "re";  val = val.slice(1); }
+        else if (val.startsWith("!=")) { op = "neq"; val = val.slice(2); }
+        if (key === target.key && op === target.op && val === target.val) { removed = true; return false; }
+      }
+      return true;
+    });
+  }
+  input.value = newParts.join(" ").trim();
+  applyFilter();
+}
+
+function renderTable(rows, q) {
   const tbody = document.getElementById("tbody");
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">
+      <svg class="icon"><use href="#i-search"/></svg>
+      <div>Otsingule ei leitud vastet.</div>
+      <div style="font-size:12px;margin-top:4px">Proovi muuta otsingusõnu või eemalda mõni filter.</div>
+    </div></td></tr>`;
+    return;
+  }
+
   tbody.innerHTML = "";
-  list.forEach((r, i) => {
+  rows.forEach((f, i) => {
+    const hasV = f.versions && f.versions.length > 0;
+
+    // Determine matching triggers
+    const triggers = f.triggers || [];
+    const matchedTriggers = q.filters.length > 0
+      ? triggers.filter(t => triggerMatches(t, q.filters))
+      : [];
+    const matchedSet = new Set(matchedTriggers.map(t => t.name));
+
+    // Row has a left indicator if it matched by trigger-rule filter
+    const filterMatchClass = (q.filters.length > 0 && matchedTriggers.length > 0) ? "filter-match" : "";
+
     const tr = document.createElement("tr");
     tr.dataset.idx = i;
-    if (r.warn) tr.classList.add("row-warn");
-    const hasVersions = r.versions && r.versions.length > 0;
+    if (f.warn) tr.classList.add("row-warn");
+    if (filterMatchClass) tr.classList.add(filterMatchClass);
+
+    // Trigger column content
+    let trigCellHtml;
+    if (triggers.length === 0) {
+      trigCellHtml = '<span class="trig-none">—</span>';
+    } else {
+      const visible = triggers.slice(0, 2);
+      const rest = triggers.length - 2;
+      const chips = visible.map(t => {
+        const cls = matchedSet.has(t.name) ? "matched" : "";
+        const rulesJson = encodeURIComponent(JSON.stringify({ name: t.name, rules: t.rules }));
+        return `<span class="trig-chip ${cls}" onclick="openTrigDetail(this, '${rulesJson}')" title="Klõpsa reeglite vaatamiseks">
+          <span class="dot"></span>${escapeHtml(t.name)}
+        </span>`;
+      }).join("");
+      const more = rest > 0 ? `<span class="trig-more" onclick="toast('Näita veel ${rest} triggerit')">+${rest}</span>` : "";
+      trigCellHtml = `<div class="trig-list">${chips}${more}</div>`;
+    }
 
     tr.innerHTML = `
       <td><span class="row-index">${i + 1}</span></td>
       <td>
         <span class="code-wrap">
-          ${hasVersions
-            ? `<button class="expand-btn" onclick="toggleExpand(this, event)" aria-label="Laienda">${ic('chevron-right','sm')}</button>`
-            : `<span style="display:inline-block;width:24px"></span>`}
-          <span class="code-cell">${r.code}</span>
+          ${hasV ? `<button class="expand-btn" onclick="toggleExpand(this, event)"><svg class="icon icon-sm"><use href="#i-chevron-right"/></svg></button>` : `<span style="display:inline-block;width:24px"></span>`}
+          <a class="code-cell" href="valem-detail.html?code=${encodeURIComponent(f.code)}" style="text-decoration:none">${escapeHtml(f.code)}</a>
         </span>
       </td>
-      <td title="${r.descr}"><span class="inline-desc">${r.descr}</span></td>
-      <td>${r.start}</td>
-      <td>${r.end}</td>
-      <td>${r.workflow === "—" ? '<span style="color:var(--ink-400)">—</span>' : `<span class="chip">${r.workflow}</span>`}</td>
+      <td title="${escapeHtml(f.descr)}"><span class="inline-desc">${escapeHtml(f.descr)}</span></td>
+      <td>${f.start}</td>
+      <td>${f.end}</td>
+      <td>${f.workflow === "—" ? '<span style="color:var(--ink-400)">—</span>' : `<span class="chip">${f.workflow}</span>`}</td>
+      <td class="trig-cell">${trigCellHtml}</td>
       <td>
         <div class="row-actions">
-          <button class="add-formula-btn" onclick="toast('Uue valemi versiooni vorm: ${r.code}')">${ic('plus','sm')}Lisa valem</button>
-          <button class="log-btn" onclick="toast('Logi vaade: ${r.code}')">${ic('list','sm')}Logi</button>
-          <button class="icon-btn" title="Muuda" onclick="toast('Muuda: ${r.code}')">${ic('pencil')}</button>
-          <button class="icon-btn" title="Laadi alla" onclick="toast('Allalaadimine: ${r.code}')">${ic('download')}</button>
-          <button class="icon-btn danger" title="Kustuta" onclick="confirmDelete('${r.code}')">${ic('trash')}</button>
+          <a class="add-formula-btn" href="valem-detail.html?code=${encodeURIComponent(f.code)}&new=1"><svg class="icon icon-sm"><use href="#i-plus"/></svg>Lisa valem</a>
+          <button class="log-btn" onclick="toast('Logi vaade: ${f.code}')"><svg class="icon icon-sm"><use href="#i-list"/></svg>Logi</button>
+          <a class="icon-btn" title="Muuda" href="valem-detail.html?code=${encodeURIComponent(f.code)}"><svg class="icon"><use href="#i-pencil"/></svg></a>
+          <button class="icon-btn danger" title="Kustuta" onclick="toast('Kustuta: ${f.code}')"><svg class="icon"><use href="#i-trash"/></svg></button>
         </div>
       </td>
     `;
     tbody.appendChild(tr);
 
-    if (hasVersions) {
-      r.versions.forEach((v, vi) => {
+    if (hasV) {
+      f.versions.forEach((v, vi) => {
         const child = document.createElement("tr");
         child.className = "child-row" + (v.active ? " active" : "");
         child.dataset.parent = i;
         child.style.display = "none";
         child.innerHTML = `
           <td></td>
-          <td style="font-size:12px">v${r.versions.length - vi}${v.active?' • aktiivne':''}</td>
+          <td style="font-size:12px;padding-left:48px">v${f.versions.length - vi}${v.active?' • aktiivne':''}</td>
           <td></td>
           <td>${v.start}</td>
           <td>${v.end}</td>
-          <td></td>
+          <td></td><td></td>
           <td>
             <div class="row-actions">
-              <button class="log-btn" onclick="toast('Logi versioonile v${r.versions.length - vi}')">${ic('list','sm')}Logi</button>
-              <button class="icon-btn" title="Muuda">${ic('pencil')}</button>
-              <button class="icon-btn" title="Laadi alla">${ic('download')}</button>
-              <button class="icon-btn danger" title="Kustuta">${ic('trash')}</button>
+              <button class="log-btn" onclick="toast('Logi v${f.versions.length - vi}')"><svg class="icon icon-sm"><use href="#i-list"/></svg>Logi</button>
+              <button class="icon-btn"><svg class="icon"><use href="#i-pencil"/></svg></button>
+              <button class="icon-btn danger"><svg class="icon"><use href="#i-trash"/></svg></button>
             </div>
           </td>
         `;
@@ -712,29 +1063,178 @@ function toggleExpand(btn, ev) {
   const tr = btn.closest("tr");
   const idx = tr.dataset.idx;
   const expanded = tr.classList.toggle("expanded");
-  document.querySelectorAll(`tr.child-row[data-parent="${idx}"]`).forEach(child => {
-    child.style.display = expanded ? "" : "none";
-  });
+  document.querySelectorAll(`tr.child-row[data-parent="${idx}"]`).forEach(c => c.style.display = expanded ? "" : "none");
 }
 
+/* ============================================================
+   Trigger detail popover
+   ============================================================ */
+function openTrigDetail(anchor, dataEnc) {
+  const data = JSON.parse(decodeURIComponent(dataEnc));
+  document.getElementById("trigDetailName").textContent = data.name;
+  const q = parseQuery(document.getElementById("searchInput").value);
+  const rows = data.rules.map(r => {
+    const matched = q.filters.some(f => ruleMatchesFilter(r, f));
+    return `<tr class="${matched ? 'rule-matched' : ''}">
+      <td>${escapeHtml(r.key)}</td>
+      <td>${escapeHtml(r.val)}</td>
+      <td>${r.regex ? '<span class="re-badge">RE</span>' : ''}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("trigDetailRules").innerHTML = rows;
+
+  const rect = anchor.getBoundingClientRect();
+  const pop = document.getElementById("trigDetail");
+  pop.style.left = Math.min(window.innerWidth - 480, rect.left) + "px";
+  pop.style.top  = (rect.bottom + window.scrollY + 6) + "px";
+  pop.classList.add("show");
+}
+function closeTrigDetail() { document.getElementById("trigDetail").classList.remove("show"); }
+
+/* ============================================================
+   Main apply filter (pipeline)
+   ============================================================ */
 function applyFilter() {
-  const q = document.getElementById("searchInput").value.toLowerCase();
+  const raw = document.getElementById("searchInput").value;
+  const q = parseQuery(raw);
+  renderParsedTokens(q);
+
   const wf = document.getElementById("wfFilter").value;
   const tp = document.getElementById("typeFilter").value;
-  const filtered = rows.filter(r => {
-    if (q && !(r.code.toLowerCase().includes(q) || r.descr.toLowerCase().includes(q))) return false;
-    if (wf !== "Kõik" && r.workflow !== wf) return false;
-    if (tp !== "Kõik" && r.type !== tp) return false;
+
+  const result = FORMULAS.filter(f => {
+    if (!formulaMatches(f, q)) return false;
+    if (wf !== "Kõik" && f.workflow !== wf) return false;
+    if (tp !== "Kõik" && f.type !== tp) return false;
     return true;
   });
-  render(filtered);
-  document.getElementById("countLabel").textContent = `Näitab ${filtered.length} / ${rows.length} kirjet`;
+
+  renderTable(result, q);
+
+  const wrap = document.getElementById("searchWrap");
+  wrap.classList.toggle("has-value", raw.length > 0);
+
+  // Result summary
+  const sum = document.getElementById("resultSummary");
+  let sumText = `Leiti <strong>${result.length}</strong> / ${FORMULAS.length} valemit`;
+  if (q.filters.length > 0) {
+    const totalMatchedTriggers = result.reduce((acc, f) => acc + (f.triggers||[]).filter(t => triggerMatches(t, q.filters)).length, 0);
+    sumText += ` (${totalMatchedTriggers} vastav${totalMatchedTriggers===1?'':'at'} triggerit)`;
+  }
+  sum.innerHTML = sumText;
+
+  document.getElementById("countLabel").textContent = `Näitab ${result.length} / 142 kirjet`;
 }
 
-document.getElementById("searchInput").addEventListener("input", applyFilter);
-document.getElementById("wfFilter").addEventListener("change", applyFilter);
-document.getElementById("typeFilter").addEventListener("change", applyFilter);
+function clearSearch() {
+  document.getElementById("searchInput").value = "";
+  applyFilter();
+  document.getElementById("searchInput").focus();
+}
 
+/* ============================================================
+   Syntax help popover
+   ============================================================ */
+function toggleHelp(ev) {
+  ev.stopPropagation();
+  const p = document.getElementById("syntaxPop");
+  if (!p.classList.contains("show")) {
+    const keys = KNOWN_KEYS.map(k => `<span class="meta-key" onclick="insertMetaKey('${k.k}')" title="${k.desc}">${k.k}</span>`).join("");
+    document.getElementById("metaKeyList").innerHTML = keys;
+    // position below help button
+    const btn = document.getElementById("helpBtn");
+    const rect = btn.getBoundingClientRect();
+    p.style.top = (rect.bottom + window.scrollY + 6) + "px";
+    p.style.right = (window.innerWidth - rect.right) + "px";
+    p.style.left = "auto";
+  }
+  p.classList.toggle("show");
+}
+function insertExample(el) {
+  document.getElementById("searchInput").value = el.textContent;
+  document.getElementById("syntaxPop").classList.remove("show");
+  applyFilter();
+  document.getElementById("searchInput").focus();
+}
+function insertMetaKey(k) {
+  const input = document.getElementById("searchInput");
+  const cur = input.value.trim();
+  input.value = (cur ? cur + " " : "") + k + ":";
+  document.getElementById("syntaxPop").classList.remove("show");
+  input.focus();
+  applyFilter();
+}
+
+/* ============================================================
+   Typeahead for the input
+   ============================================================ */
+let ta = { visible: false, items: [], hl: 0, mode: null, prefixStart: 0 };
+
+function handleTypeahead() {
+  const input = document.getElementById("searchInput");
+  const ta_el = document.getElementById("typeahead");
+  const caret = input.selectionStart;
+  const before = input.value.slice(0, caret);
+  // find current token
+  const tokMatch = before.match(/(?:^|\s)([^\s]*)$/);
+  const curTok = tokMatch ? tokMatch[1] : "";
+  const tokStart = before.length - curTok.length;
+
+  // metakey completion: typing a word WITHOUT colon
+  if (curTok && !curTok.includes(":") && /^[a-zA-Z_]\w*$/.test(curTok)) {
+    const lc = curTok.toLowerCase();
+    const matches = KNOWN_KEYS.filter(k => k.k.toLowerCase().includes(lc));
+    if (matches.length > 0) {
+      ta.mode = "key"; ta.prefixStart = tokStart; ta.items = matches; ta.hl = 0;
+      ta_el.innerHTML = matches.map((m, i) =>
+        `<div class="ta-item ${i===0?'hl':''}" onmousedown="pickTa(${i})" onmouseover="setHl(${i})">
+           <span class="ta-key">${m.k}</span><span class="ta-meta">${m.desc}</span>
+         </div>`).join("");
+      positionTypeahead();
+      ta_el.classList.add("show");
+      ta.visible = true;
+      return;
+    }
+  }
+  ta_el.classList.remove("show");
+  ta.visible = false;
+}
+
+function setHl(i) {
+  ta.hl = i;
+  const items = document.querySelectorAll("#typeahead .ta-item");
+  items.forEach((el, idx) => el.classList.toggle("hl", idx === i));
+}
+
+function pickTa(i) {
+  const input = document.getElementById("searchInput");
+  const chosen = ta.items[i];
+  if (ta.mode === "key") {
+    const before = input.value.slice(0, ta.prefixStart);
+    const after = input.value.slice(input.selectionStart);
+    input.value = before + chosen.k + ":" + after;
+    const pos = (before + chosen.k + ":").length;
+    input.setSelectionRange(pos, pos);
+  }
+  document.getElementById("typeahead").classList.remove("show");
+  ta.visible = false;
+  input.focus();
+  applyFilter();
+}
+
+function positionTypeahead() {
+  const input = document.getElementById("searchInput");
+  const rect = input.getBoundingClientRect();
+  const ta_el = document.getElementById("typeahead");
+  ta_el.style.left = (rect.left + window.scrollX) + "px";
+  ta_el.style.top = (rect.bottom + window.scrollY + 4) + "px";
+  ta_el.style.width = rect.width + "px";
+}
+
+/* ============================================================
+   Utils
+   ============================================================ */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
 let toastTimer;
 function toast(msg) {
   const t = document.getElementById("toast");
@@ -744,13 +1244,44 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-function confirmDelete(code) {
-  if (confirm(`Kas oled kindel, et soovid kustutada valemit "${code}"?`)) {
-    toast(`Kustutatud: ${code}`);
-  }
-}
+/* ============================================================
+   Events
+   ============================================================ */
+const input = document.getElementById("searchInput");
+input.addEventListener("input", () => { handleTypeahead(); applyFilter(); });
+input.addEventListener("focus", () => { document.getElementById("searchWrap").classList.add("has-focus"); });
+input.addEventListener("blur",  () => { document.getElementById("searchWrap").classList.remove("has-focus"); setTimeout(()=>document.getElementById("typeahead").classList.remove("show"),150); });
+input.addEventListener("keydown", (e) => {
+  if (!ta.visible) return;
+  const items = document.querySelectorAll("#typeahead .ta-item");
+  if (e.key === "ArrowDown") { e.preventDefault(); setHl(Math.min(ta.hl+1, items.length-1)); items[ta.hl]?.scrollIntoView({block:"nearest"}); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setHl(Math.max(ta.hl-1, 0)); items[ta.hl]?.scrollIntoView({block:"nearest"}); }
+  else if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); pickTa(ta.hl); }
+  else if (e.key === "Escape") { document.getElementById("typeahead").classList.remove("show"); ta.visible = false; }
+});
 
-render(rows);
+document.getElementById("wfFilter").addEventListener("change", applyFilter);
+document.getElementById("typeFilter").addEventListener("change", applyFilter);
+
+// Cmd/Ctrl+K shortcut
+document.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); input.focus(); input.select(); }
+  if (e.key === "Escape") { closeTrigDetail(); document.getElementById("syntaxPop").classList.remove("show"); }
+});
+
+// Close popovers on outside click
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("#syntaxPop") && !e.target.closest("#helpBtn")) {
+    document.getElementById("syntaxPop").classList.remove("show");
+  }
+  if (!e.target.closest("#trigDetail") && !e.target.closest(".trig-chip")) {
+    closeTrigDetail();
+  }
+});
+
+/* Pre-populate for demo */
+input.value = "message_type:A13 domain:~10T-FI-EE";
+applyFilter();
 </script>
 
 </body>

@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8">
+<title>BHT Elekter — Valem</title>
+<style>
+  :root {
+    --teal-900: #004b58;
+    --teal-800: #00606f;
+    --teal-700: #007B8F;
+    --teal-600: #0e8fa3;
+    --teal-100: #cfe6ea;
+    --teal-050: #e8f2f4;
+    --ink-900: #1e2a2e;
+    --ink-700: #3d4e55;
+    --ink-500: #6b7c83;
+    --ink-400: #8a9aa0;
+    --line: #d8dfe2;
+    --line-soft: #e9edef;
+    --bg-zebra: #f6f8f9;
+    --green-600: #1f8a55;
+    --green-500: #2e9b61;
+    --green-050: #e9f6ee;
+    --green-100: #b7e0c9;
+    --amber-050: #fff6db;
+    --amber-500: #e0a81b;
+    --red-500: #c8394a;
+    --red-050: #fcecee;
+    --radius: 4px;
+    --radius-lg: 6px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --shadow-pop: 0 10px 32px rgba(0,30,40,.15), 0 2px 8px rgba(0,30,40,.06);
+    --focus: 0 0 0 3px rgba(0,123,143,.2);
+    --mono: "JetBrains Mono", "SFMono-Regular", "Menlo", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; min-height: 100%;
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    font-size: 13px;
+    color: var(--ink-900);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; font-size: inherit; cursor: pointer; }
+  a { color: var(--teal-700); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .icon {
+    display: inline-block;
+    width: 16px; height: 16px;
+    vertical-align: middle;
+    stroke-width: 1.75; stroke: currentColor; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .icon-sm { width: 13px; height: 13px; }
+  .icon-xs { width: 11px; height: 11px; }
+
+  /* =========================================== TOPBAR */
+  .topbar {
+    height: 48px; background: var(--teal-900); color: #fff;
+    display: flex; align-items: center; padding: 0 20px; gap: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-sub { font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,.92); }
+  .topbar-right {
+    margin-left: auto; display: flex; align-items: center; gap: 22px; font-size: 13px;
+  }
+  .topbar-right .item {
+    display: inline-flex; align-items: center; gap: 7px; color: #fff;
+    cursor: pointer; white-space: nowrap;
+  }
+  .topbar-right .sep { width: 1px; height: 20px; background: rgba(255,255,255,.2); }
+
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 48px); }
+
+  /* =========================================== SIDEBAR */
+  .sidebar { background: #fff; border-right: 1px solid var(--line); padding: 18px 0; }
+  .side-back {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 20px; color: var(--ink-700);
+    font-weight: 600; font-size: 11.5px; letter-spacing: 0.08em; cursor: pointer;
+  }
+  .side-item {
+    display: block; padding: 9px 20px 9px 36px;
+    font-size: 13px; color: var(--ink-700);
+    border-left: 3px solid transparent; cursor: pointer; text-decoration: none;
+  }
+  .side-item:hover { background: var(--teal-050); color: var(--teal-800); text-decoration: none; }
+  .side-item.active {
+    background: var(--teal-050); color: var(--teal-800);
+    border-left-color: var(--teal-700); font-weight: 600;
+  }
+
+  /* =========================================== MAIN */
+  .main {
+    padding: 16px 24px 100px;
+    min-width: 0;
+    max-width: 1400px;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--ink-500); margin-bottom: 10px;
+  }
+  .breadcrumb a { color: var(--ink-500); }
+  .breadcrumb a:hover { color: var(--teal-700); }
+  .breadcrumb .sep { color: var(--ink-400); }
+  .breadcrumb .current { color: var(--ink-900); font-weight: 500; }
+
+  .page-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; gap: 12px; flex-wrap: wrap;
+  }
+  .page-title-wrap { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .page-title {
+    font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.01em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .page-title .title-code {
+    font-family: var(--mono); font-size: 20px; color: var(--teal-700);
+  }
+  .page-title-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 500;
+    background: var(--teal-050); color: var(--teal-800);
+    border: 1px solid var(--teal-100);
+  }
+  .page-title-badge.new {
+    background: var(--green-050); color: var(--green-600); border-color: var(--green-100);
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 34px; padding: 0 14px; border-radius: var(--radius);
+    border: 1px solid transparent; font-size: 13px; font-weight: 500;
+    background: #fff; color: var(--ink-900);
+    transition: background .12s, border-color .12s;
+    text-decoration: none;
+  }
+  .btn:hover { text-decoration: none; }
+  .btn-primary { background: var(--teal-700); color: #fff; border-color: var(--teal-700); }
+  .btn-primary:hover { background: var(--teal-800); }
+  .btn-secondary { background: #fff; color: var(--teal-700); border-color: var(--teal-700); }
+  .btn-secondary:hover { background: var(--teal-050); }
+  .btn-ghost { background: transparent; color: var(--ink-700); border-color: var(--line); }
+  .btn-ghost:hover { background: var(--line-soft); }
+  .btn-danger-ghost { background: transparent; color: var(--red-500); border-color: transparent; }
+  .btn-danger-ghost:hover { background: var(--red-050); border-color: #f1c1c7; }
+  .btn-sm { height: 30px; padding: 0 10px; font-size: 12.5px; }
+  .btn:focus-visible { outline: none; box-shadow: var(--focus); }
+
+  /* =========================================== FORM SECTIONS */
+  .section {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    background: #fafbfb;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .section-title {
+    margin: 0;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-900);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .count {
+    font-family: var(--mono);
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 22px; height: 20px; padding: 0 6px;
+    border-radius: 999px;
+    background: var(--teal-700); color: #fff;
+    font-size: 11.5px; font-weight: 600;
+  }
+  .section-title .count.zero { background: var(--ink-400); }
+  .section-body { padding: 16px; }
+  .section-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* Form grid */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 14px 16px;
+    align-items: start;
+  }
+  .form-grid > label {
+    font-size: 13px;
+    color: var(--ink-700);
+    font-weight: 500;
+    padding-top: 9px;
+  }
+  .form-grid > label .req { color: var(--red-500); margin-left: 2px; }
+  .form-grid .field-control { min-width: 0; }
+  .form-grid .field-hint {
+    display: block;
+    font-size: 11.5px; color: var(--ink-500);
+    margin-top: 4px;
+  }
+  .form-grid .field-error {
+    display: block;
+    font-size: 11.5px; color: var(--red-500);
+    margin-top: 4px;
+    display: none;
+  }
+
+  .input-row-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    align-items: start;
+  }
+  .input-row-2 .form-row-inner { display: flex; flex-direction: column; }
+  .input-row-2 label {
+    font-size: 12px; font-weight: 500; color: var(--ink-700);
+    margin-bottom: 4px;
+  }
+  .input-row-2 label .req { color: var(--red-500); margin-left: 2px; }
+
+  .input, .select {
+    height: 34px;
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 12px;
+    font-size: 13px;
+    color: var(--ink-900);
+    background: #fff;
+    font-family: inherit;
+  }
+  .input.mono { font-family: var(--mono); font-size: 12.5px; }
+  .input:focus, .select:focus {
+    outline: none; border-color: var(--teal-700); box-shadow: var(--focus);
+  }
+  .input[readonly], .input:disabled, .select:disabled {
+    background: var(--bg-zebra);
+    color: var(--ink-500);
+    cursor: not-allowed;
+  }
+  .input.error { border-color: var(--red-500); }
+  .input.error:focus { box-shadow: 0 0 0 3px rgba(200,57,74,.15); }
+
+  .select {
+    appearance: none; -webkit-appearance: none;
+    padding-right: 30px;
+    background: #fff
+      url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7c83' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l6 6l6 -6'/%3e%3c/svg%3e")
+      no-repeat right 8px center;
+    cursor: pointer;
+  }
+
+  .input-with-icon {
+    position: relative;
+  }
+  .input-with-icon .suffix-icon {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    color: var(--ink-400); pointer-events: none;
+  }
+  .input-with-icon .input { padding-right: 32px; }
+
+  /* =========================================== TRIGGER TABLE */
+  .trig-table-wrap {
+    border-top: 1px solid var(--line-soft);
+  }
+  table.trig-table {
+    width: 100%; border-collapse: collapse; table-layout: fixed;
+  }
+  table.trig-table thead th {
+    background: var(--teal-900); color: #fff;
+    font-weight: 600; font-size: 10.5px;
+    letter-spacing: 0.03em; text-transform: uppercase;
+    text-align: left; padding: 9px 8px; white-space: normal;
+    line-height: 1.25;
+    vertical-align: middle;
+  }
+  table.trig-table thead th.center { text-align: center; }
+  table.trig-table tbody td {
+    padding: 9px 10px; font-size: 13px;
+    border-top: 1px solid var(--line-soft);
+    vertical-align: middle;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  table.trig-table tbody td.center { text-align: center; }
+  table.trig-table tbody tr:nth-child(odd) td { background: var(--bg-zebra); }
+  table.trig-table tbody tr:hover td { background: var(--teal-050); }
+
+  .trig-name {
+    font-family: var(--mono); font-size: 12.5px; font-weight: 600;
+    cursor: pointer;
+  }
+  .trig-name:hover { color: var(--teal-700); }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 500;
+    border: 1px solid;
+  }
+  .pill-active { background: var(--green-050); color: var(--green-600); border-color: var(--green-100); }
+  .pill-inactive { background: #f0f2f3; color: var(--ink-500); border-color: var(--line); }
+  .pill-warn { background: var(--amber-050); color: #8a6b1a; border-color: #e8d8a7; }
+
+  /* Boolean +/- indicators */
+  .bool-yes, .bool-no {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--mono);
+    line-height: 1;
+  }
+  .bool-yes { background: var(--green-050); color: var(--green-600); }
+  .bool-no  { background: var(--line-soft); color: var(--ink-400); }
+
+  .row-actions { display: flex; align-items: center; gap: 2px; justify-content: flex-end; }
+  .icon-btn {
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: 1px solid transparent;
+    border-radius: var(--radius); color: var(--ink-500); padding: 0;
+  }
+  .icon-btn:hover { color: var(--teal-700); background: var(--teal-050); }
+  .icon-btn.danger:hover { color: var(--red-500); background: var(--red-050); }
+  .log-btn {
+    height: 26px; padding: 0 10px; border-radius: var(--radius);
+    background: var(--teal-700); color: #fff; border: 1px solid var(--teal-700);
+    font-size: 11.5px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .log-btn:hover { background: var(--teal-800); }
+
+  /* Empty triggers state */
+  .empty-triggers {
+    padding: 40px 16px;
+    text-align: center; color: var(--ink-500);
+    font-size: 13px;
+    background: var(--bg-zebra);
+  }
+  .empty-triggers .icon { color: var(--ink-400); width: 28px; height: 28px; margin-bottom: 6px; }
+  .empty-triggers-action { margin-top: 10px; }
+
+  /* =========================================== STICKY FOOTER */
+  .form-footer {
+    position: fixed;
+    bottom: 0; left: 220px; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    padding: 12px 24px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    box-shadow: 0 -2px 8px rgba(0,0,0,.04);
+    z-index: 10;
+  }
+  .form-footer .footer-info {
+    font-size: 12px; color: var(--ink-500);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .form-footer .footer-info .icon { color: var(--amber-500); }
+  .form-footer .btn-group { display: flex; gap: 8px; }
+
+  /* =========================================== MODAL */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0, 30, 40, .5);
+    z-index: 100;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 40px 20px;
+  }
+  .modal-backdrop.show { display: flex; animation: fadeIn .15s ease; }
+  @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+  .modal {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 720px;
+    box-shadow: 0 20px 60px rgba(0, 30, 40, .3);
+    overflow: hidden;
+    animation: slideIn .2s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal-head {
+    background: var(--teal-900);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-head h3 { margin: 0; font-size: 14px; font-weight: 600; }
+  .modal-head .close-btn {
+    background: transparent; border: 0; color: #fff;
+    cursor: pointer; padding: 4px;
+    width: 28px; height: 28px; border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: .85;
+  }
+  .modal-head .close-btn:hover { background: rgba(255,255,255,.15); opacity: 1; }
+  .modal-body { padding: 18px 20px; max-height: 70vh; overflow-y: auto; }
+  .modal-foot {
+    padding: 12px 20px;
+    border-top: 1px solid var(--line);
+    display: flex; gap: 8px; justify-content: flex-end;
+    background: #fafbfb;
+  }
+
+  /* Trigger edit modal */
+  .tm-grid {
+    display: grid; grid-template-columns: 130px 1fr; gap: 10px 14px;
+    align-items: center;
+  }
+  .tm-grid > label {
+    font-size: 12.5px; color: var(--ink-700); font-weight: 500;
+  }
+  .tm-grid > label .req { color: var(--red-500); }
+  .tm-grid .full { grid-column: 1 / -1; }
+  .tm-grid .info-box {
+    grid-column: 1 / -1;
+    background: var(--teal-050); border: 1px solid var(--teal-100);
+    border-left: 3px solid var(--teal-700);
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    font-size: 12px; color: var(--teal-800);
+  }
+  .tm-check-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; cursor: pointer;
+    padding: 6px 0;
+  }
+  .tm-check-row input[type=checkbox] {
+    accent-color: var(--teal-700);
+    width: 16px; height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .tm-check-row .hint { color: var(--ink-500); font-size: 11.5px; margin-left: auto; }
+
+  /* Mini rules table inside modal */
+  .rules-head {
+    background: var(--teal-900); color: #fff;
+    padding: 8px 10px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .rules-head .btn-sm { height: 26px; padding: 0 10px; font-size: 11.5px; }
+  table.rules-table {
+    width: 100%; border-collapse: collapse;
+    border: 1px solid var(--line); border-top: 0;
+  }
+  table.rules-table thead th {
+    background: var(--bg-zebra);
+    padding: 7px 10px; font-size: 10.5px;
+    color: var(--ink-700);
+    font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  table.rules-table thead th.center { text-align: center; }
+  table.rules-table tbody td {
+    padding: 6px; border-bottom: 1px solid var(--line-soft);
+    vertical-align: middle;
+  }
+  table.rules-table tbody td.center { text-align: center; }
+  table.rules-table tbody tr:last-child td { border-bottom: 0; }
+  .rule-input {
+    width: 100%; height: 30px; padding: 0 8px;
+    border: 1px solid var(--line); border-radius: 3px;
+    font-family: var(--mono); font-size: 12px;
+    background: #fff;
+  }
+  .rule-input:focus { outline: none; border-color: var(--teal-700); box-shadow: var(--focus); }
+  .rule-checkbox {
+    accent-color: var(--teal-700);
+    width: 16px; height: 16px; cursor: pointer;
+  }
+
+  /* =========================================== TOAST */
+  .toast {
+    position: fixed; bottom: 80px; right: 24px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--teal-700);
+    padding: 12px 16px; border-radius: var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    display: none; font-size: 13px;
+    gap: 10px; align-items: center;
+    z-index: 200;
+    max-width: 360px;
+  }
+  .toast.show { display: flex; }
+  .toast.success { border-left-color: var(--green-500); }
+  .toast.error   { border-left-color: var(--red-500); }
+  .toast .icon { color: var(--teal-700); }
+  .toast.success .icon { color: var(--green-500); }
+  .toast.error   .icon { color: var(--red-500); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .form-footer { left: 0; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid > label { padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6l6 -6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M9 12h12l-3 -3"/><path d="M18 15l3 -3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6l-12 12"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5l10 -10"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M13 5h8M13 9h5M13 15h8M13 19h5"/><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="3" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.871l-8.106 -13.534a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></symbol>
+  </defs>
+</svg>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <svg width="85" height="24" viewBox="0 0 85 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M61.7941 6.05561C60.6475 6.05561 58.8864 6.31963 57.1385 7.48577C56.881 6.97176 56.0261 6.34921 55.1618 6.05165C54.9728 5.98671 54.767 6.07146 54.6695 6.2486L53.9407 7.60406C53.83 7.81077 53.9026 8.06503 54.1011 8.18515C54.557 8.45314 55.0245 8.6324 55.0245 9.54032V21.299C55.0245 21.5353 55.2058 21.7264 55.4385 21.7264H57.1902C57.4152 21.7264 57.6003 21.5334 57.6003 21.299C57.6003 21.299 57.5983 11.5144 57.6003 10.0053C58.9493 8.81929 60.5214 8.55344 61.5901 8.55344C62.4447 8.55344 63.2653 8.79582 63.664 9.34337C64.1545 10.0269 64.2135 10.547 64.2135 12.8695V21.299C64.2135 21.4112 64.2554 21.5215 64.3319 21.6002C64.4102 21.6831 64.515 21.7264 64.6237 21.7264H66.3754C66.4823 21.7264 66.5909 21.6831 66.6654 21.6002C66.7436 21.5215 66.7894 21.4112 66.7894 21.299V12.5976C66.7894 8.89033 66.1577 8.23028 65.3793 7.38517C64.639 6.57969 63.3205 6.05561 61.7941 6.05561Z" fill="white"/>
+      <path d="M49.4949 4.05613C50.3669 4.0543 51.0729 3.32535 51.0747 2.42506C51.0729 1.52659 50.3669 0.79581 49.4949 0.793981C48.6229 0.79581 47.9168 1.52659 47.915 2.42506C47.9168 3.32535 48.6229 4.0543 49.4949 4.05613Z" fill="white"/>
+      <path d="M45.9283 6.20531C45.6956 6.12451 45.2795 6.05958 44.6499 6.05561C43.5033 6.05561 41.7401 6.31963 39.9922 7.48577C39.7347 6.97176 38.8819 6.34921 38.0176 6.05165C37.8286 5.98671 37.6207 6.07146 37.5271 6.2486L36.7965 7.60407C36.6858 7.81077 36.7563 8.06503 36.9548 8.18515C37.4107 8.45497 37.882 8.6324 37.882 9.54032V21.299C37.882 21.5353 38.0616 21.7264 38.2942 21.7264H40.0457C40.2727 21.7264 40.4561 21.5331 40.4561 21.299C40.4561 21.299 40.4523 11.5144 40.4561 10.0074C41.805 8.81929 43.3772 8.55344 44.4456 8.55344C44.9284 8.55344 45.4723 8.63606 45.6897 8.67753C46.0104 8.73667 46.2029 8.54948 46.2029 8.26198V6.60713C46.2029 6.42603 46.0924 6.26628 45.9283 6.20531Z" fill="white"/>
+      <path d="M52.2124 20.115C51.4071 19.6522 50.7584 19.597 50.7584 17.4754V6.84747C50.7584 6.61119 50.5774 6.42217 50.3464 6.42217H48.5968C48.3697 6.42217 48.1846 6.61302 48.1846 6.84747V17.0242C48.1846 18.9625 48.4459 19.9415 49.2453 20.9146C49.7378 21.5137 50.3884 21.943 51.1154 22.2149C51.287 22.278 51.4836 22.2308 51.6056 22.0277L52.3651 20.704C52.472 20.507 52.4165 20.2333 52.2124 20.115Z" fill="white"/>
+      <path d="M20.1878 20.115C19.3825 19.6522 18.7358 19.597 18.7358 17.4754V0.425608C18.7358 0.19116 18.5506 5.72205e-06 18.3218 5.72205e-06H16.5721C16.3451 5.72205e-06 16.1599 0.192989 16.1599 0.425608V17.0242C16.1599 18.9625 16.4212 19.9415 17.2206 20.9146C17.7132 21.5137 18.3616 21.943 19.0907 22.2149C19.2585 22.278 19.4569 22.2308 19.583 22.0277L20.3404 20.704C20.4453 20.507 20.3918 20.2333 20.1878 20.115Z" fill="white"/>
+      <path d="M76.4494 27.6775C73.3355 27.6775 70.8131 26.661 70.8131 24.6675C70.8131 22.7092 73.3355 21.6593 76.4494 21.6593C79.5595 21.6593 82.0819 22.7092 82.0819 24.6675C82.0819 26.661 79.5595 27.6775 76.4494 27.6775ZM73.4519 9.32773C74.217 8.79969 75.2759 8.55945 76.2796 8.56128C77.4074 8.55945 78.4758 8.80365 79.2238 9.32773C79.9697 9.85547 80.4371 10.618 80.4448 11.8689C80.4371 13.0999 79.9658 13.8606 79.2046 14.3963C78.4394 14.9243 77.348 15.1764 76.1937 15.1743C75.2036 15.1764 74.1674 14.942 73.4215 14.4179C72.6735 13.892 72.183 13.1277 72.1735 11.8689C72.1812 10.6298 72.685 9.86553 73.4519 9.32773ZM76.6021 19.3584C75.9858 19.3584 74.4975 19.4608 73.8603 19.5102C73.5644 19.5337 72.5819 19.4136 72.5819 18.5803C72.5819 17.5935 73.6542 17.4398 74.2704 17.4654C74.6617 17.4791 75.3524 17.5325 76.1937 17.5325C77.9531 17.5325 79.6321 17.1816 80.9143 16.2856C82.1965 15.3929 83.0304 13.9097 83.0227 11.8689C83.0207 11.0335 82.7918 10.3186 82.5609 9.62102C82.3967 9.11279 82.9655 8.32897 83.9346 7.82074C84.1103 7.72806 84.2571 7.49757 84.0988 7.2238L83.5053 6.19546C83.3679 5.97686 83.2097 5.92961 82.9959 5.98479C82.6524 6.07534 81.4695 6.65856 80.8742 7.44056C79.7045 6.61313 78.1341 6.14028 76.2566 6.14028C74.3773 6.14028 72.618 6.67807 71.4332 7.67501C70.2444 8.67378 69.5652 10.1411 69.5673 11.8689C69.5652 13.8703 70.5078 15.32 71.6698 16.2459C71.1489 16.6185 70.4658 17.2862 70.4658 18.4523C70.4658 19.2364 70.7845 19.9337 71.378 20.4517C69.838 21.2004 68.1743 22.3172 68.1859 24.8586C68.1859 25.2485 68.2984 25.615 68.3937 25.9065C68.5751 26.472 68.1132 27.25 67.0484 27.8253C66.8425 27.9375 66.7622 28.1817 66.8824 28.4259L67.4952 29.4781C67.5905 29.6436 67.7831 29.7223 67.9605 29.6692C68.697 29.4524 69.6225 28.8714 70.1014 28.2586C71.7728 29.4741 74.072 30 76.4571 30C82.5305 30 84.7493 27.3031 84.7493 24.6833C84.7493 21.941 82.3338 19.3584 76.6021 19.3584Z" fill="white"/>
+      <path d="M24.5547 12.7731C24.6672 11.4197 25.07 10.3856 25.6804 9.68043C26.3616 8.90422 27.3137 8.48258 28.5787 8.47862C29.8916 8.48258 30.9065 8.91398 31.6297 9.69994C32.2862 10.4112 32.7155 11.4396 32.8337 12.7731H24.5547ZM28.7237 6.05944C26.6363 6.05548 24.8866 6.70181 23.6865 8.06307C22.4882 9.42037 21.8643 11.4356 21.8643 14.0734C21.8643 16.8684 22.5798 18.8955 23.8658 20.2135C25.1483 21.5293 26.9437 22.0888 28.9777 22.0888H28.9871C31.164 22.0888 32.9214 21.226 34.3373 20.1346C34.5166 19.9989 34.5567 19.7367 34.4271 19.5477L33.5816 18.3126C33.4349 18.0959 33.1656 18.0879 32.9958 18.2178C32.0172 18.9644 30.3552 19.6736 28.8421 19.6696C27.6361 19.666 26.6289 19.3074 25.8847 18.537C25.2035 17.8297 24.7168 16.7444 24.5642 15.1645H34.9365C35.1597 15.1645 35.3428 14.9773 35.3466 14.745C35.3466 14.745 35.377 14.2819 35.377 13.5118C35.377 11.524 34.8485 9.61336 33.7343 8.25027C32.6219 6.88687 30.9198 6.05548 28.7237 6.05944Z" fill="white"/>
+      <path d="M2.69045 12.7731C2.80296 11.4197 3.20368 10.3856 3.81612 9.68044C4.49737 8.90423 5.44557 8.48259 6.71269 8.47863C8.02528 8.48259 9.04229 8.91399 9.76931 9.69995C10.4198 10.4112 10.8492 11.4396 10.9676 12.7731H2.69045ZM6.85945 6.05945C4.77023 6.05549 3.02236 6.70182 1.82228 8.06308C0.62219 9.42038 0 11.4356 0 14.0734C0 16.8684 0.715504 18.8956 1.99975 20.2135C3.284 21.5294 5.0794 22.0888 7.11341 22.0888H7.12079C9.29978 22.0888 11.0553 21.226 12.471 20.1346C12.6505 19.9989 12.6904 19.7367 12.5625 19.5477L11.7156 18.3126C11.5686 18.0959 11.3013 18.0879 11.1315 18.2178C10.1508 18.9645 8.49097 19.6736 6.9758 19.6696C5.7701 19.666 4.76639 19.3074 4.02047 18.537C3.33922 17.8297 2.8508 16.7444 2.69813 15.1645H13.0701C13.2954 15.1645 13.4785 14.9773 13.4841 14.745C13.4841 14.745 13.5128 14.2819 13.5128 13.5118C13.5128 11.524 12.9842 9.61337 11.868 8.25028C10.7556 6.88688 9.05764 6.05549 6.85945 6.05945Z" fill="white"/>
+    </svg>
+    <span class="brand-sub">BHT ELEKTER</span>
+  </div>
+  <div class="topbar-right">
+    <span class="item"><svg class="icon"><use href="#i-clock"/></svg>21.04.2026 14:12</span>
+    <span class="item"><svg class="icon"><use href="#i-bell"/></svg>Teavitused</span>
+    <span class="sep"></span>
+    <span class="item"><svg class="icon"><use href="#i-user"/></svg>MARI MAASIKAS</span>
+    <span class="item"><svg class="icon"><use href="#i-logout"/></svg>Logi välja</span>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-back"><svg class="icon icon-sm"><use href="#i-chevron-left"/></svg>SEADED</div>
+    <a class="side-item" href="valemid.html">Sõnumi väljad</a>
+    <a class="side-item" href="valemid.html">Koodiloend</a>
+    <a class="side-item active" href="valemid.html">Valemid</a>
+    <a class="side-item">Workflow'd</a>
+    <a class="side-item">Mõõteühikud</a>
+  </aside>
+
+  <main class="main">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="valemid.html"><svg class="icon icon-xs" style="margin-right:4px"><use href="#i-chevron-left"/></svg>Valemid</a>
+      <span class="sep">/</span>
+      <span class="current" id="crumbCurrent">Uus valem</span>
+    </nav>
+
+    <!-- Page head -->
+    <div class="page-head">
+      <div class="page-title-wrap">
+        <h1 class="page-title" id="pageTitle">Uus valem</h1>
+        <span id="modeBadge" class="page-title-badge new">
+          <svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus
+        </span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <a id="openEditorBtn" class="btn btn-secondary" href="#">
+          <svg class="icon icon-sm"><use href="#i-code"/></svg>Muuda valemi koodi
+        </a>
+      </div>
+    </div>
+
+    <!-- SECTION 1: Põhiandmed -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">Põhiandmed</h2>
+      </div>
+      <div class="section-body">
+        <div class="form-grid">
+
+          <label for="fCode">Kood <span class="req">*</span></label>
+          <div class="field-control">
+            <input id="fCode" type="text" class="input mono" placeholder="nt. SENDOUT_TSOMOL" autocomplete="off">
+            <span class="field-hint">Unikaalne identifikaator. Lubatud: A–Z, 0–9, alakriips.</span>
+            <span class="field-error" id="fCodeError">Kood on kohustuslik</span>
+          </div>
+
+          <label for="fVariables">Muutujad</label>
+          <div class="field-control">
+            <input id="fVariables" type="text" class="input mono" readonly value="$DATA, $UNIT, $START, $END, $METAS, $DATA_SETTINGS">
+            <span class="field-hint">Automaatselt genereeritud süsteemi poolt</span>
+          </div>
+
+          <label>Kehtivus</label>
+          <div class="field-control input-row-2">
+            <div class="form-row-inner">
+              <label for="fStart">Algus (EET) <span class="req">*</span></label>
+              <div class="input-with-icon">
+                <input id="fStart" type="text" class="input" placeholder="pp.kk.aaaa hh:mm">
+                <svg class="icon suffix-icon"><use href="#i-calendar"/></svg>
+              </div>
+            </div>
+            <div class="form-row-inner">
+              <label for="fEnd">Lõpp (EET) <span class="req">*</span></label>
+              <div class="input-with-icon">
+                <input id="fEnd" type="text" class="input" placeholder="pp.kk.aaaa hh:mm">
+                <svg class="icon suffix-icon"><use href="#i-calendar"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <label for="fDescr">Kirjeldus</label>
+          <div class="field-control">
+            <input id="fDescr" type="text" class="input" placeholder="Lühike kirjeldus, mida valem teeb" autocomplete="off">
+          </div>
+
+          <label for="fWorkflow">Workflow</label>
+          <div class="field-control">
+            <select id="fWorkflow" class="select">
+              <option value="">— vali workflow —</option>
+              <option>RESERVE-mFRR</option>
+              <option>RESERVE-CALC</option>
+              <option>SETTLEMENT</option>
+              <option>OPPLAN-SYSPLAN</option>
+            </select>
+          </div>
+
+          <label for="fType">Tüüp</label>
+          <div class="field-control">
+            <select id="fType" class="select">
+              <option>Sõnum</option>
+              <option>Andmed</option>
+              <option>Teavitus</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Triggerid -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">
+          Triggerid
+          <span id="trigCount" class="count zero">0</span>
+        </h2>
+        <div class="section-toolbar">
+          <button class="btn btn-primary btn-sm" onclick="openTrigger(null)">
+            <svg class="icon icon-sm"><use href="#i-plus"/></svg>Lisa trigger
+          </button>
+        </div>
+      </div>
+      <div id="trigTableWrap" class="trig-table-wrap">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- STICKY FOOTER -->
+<div class="form-footer">
+  <div class="footer-info" id="footerInfo"></div>
+  <div class="btn-group">
+    <button class="btn btn-ghost" onclick="cancelForm()">Tühista</button>
+    <button class="btn btn-secondary" onclick="saveForm(true)">Salvesta ja jätka</button>
+    <button class="btn btn-primary" onclick="saveForm(false)">Salvesta ja sulge</button>
+  </div>
+</div>
+
+<!-- ============== TRIGGER EDIT MODAL ============== -->
+<div id="trigModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="trigModalTitle">Lisa trigger</h3>
+      <button class="close-btn" onclick="closeTrigger()"><svg class="icon"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="tm-grid">
+
+        <label for="tmName">Nimi <span class="req">*</span></label>
+        <input id="tmName" class="input mono" type="text" placeholder="nt. CALC_FG_EEFI" autocomplete="off">
+
+        <label for="tmFormula">Valem <span class="req">*</span></label>
+        <select id="tmFormula" class="select"></select>
+
+        <div class="info-box" id="tmFormulaDescr">—</div>
+
+        <label for="tmStatus">Sõnumi staatus <span class="req">*</span></label>
+        <select id="tmStatus" class="select">
+          <option>DATA</option>
+          <option>ACK</option>
+          <option>CONF</option>
+          <option>CANCEL</option>
+        </select>
+
+        <label for="tmType">Tüüp</label>
+        <select id="tmType" class="select">
+          <option>Sõnum</option>
+          <option>Päring</option>
+          <option>Ajastatud</option>
+        </select>
+
+        <label>Käivitus</label>
+        <div>
+          <label class="tm-check-row">
+            <input type="checkbox" id="tmOnDataChange">
+            Ainult andmemuutuse korral
+            <span class="hint">käivitub kui $DATA muutub</span>
+          </label>
+          <label class="tm-check-row">
+            <input type="checkbox" id="tmOncePerInterval">
+            Üks kord perioodi kohta
+          </label>
+          <label class="tm-check-row">
+            <input type="checkbox" id="tmOncePerMessage">
+            Üks kord sõnumi kohta
+          </label>
+          <label class="tm-check-row">
+            <input type="checkbox" id="tmActive" checked>
+            Aktiivne
+            <span class="hint">trigger reageerib sõnumitele</span>
+          </label>
+        </div>
+
+        <!-- Trigger rules -->
+        <div class="full" style="margin-top: 6px">
+          <div class="rules-head">
+            <span>Triggeri reeglid</span>
+            <button class="btn btn-secondary btn-sm" onclick="addRule()">
+              <svg class="icon icon-sm"><use href="#i-plus"/></svg>Lisa reegel
+            </button>
+          </div>
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th style="width: 180px">METAKEY</th>
+                <th>METAVALUE</th>
+                <th class="center" style="width: 60px">REGEXP</th>
+                <th style="width: 40px"></th>
+              </tr>
+            </thead>
+            <tbody id="rulesBody"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeTrigger()">Tühista</button>
+      <button class="btn btn-secondary" onclick="saveTrigger(true)">Salvesta ja lisa uus</button>
+      <button class="btn btn-primary" onclick="saveTrigger(false)">Salvesta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast">
+  <svg class="icon"><use href="#i-info"/></svg>
+  <span id="toastText"></span>
+</div>
+
+<script>
+/* ============================================================
+   Demo data — must match valemid.html for consistency
+   ============================================================ */
+const FORMULAS = {
+  "SENDOUT_TSOMOL": {
+    code: "SENDOUT_TSOMOL",
+    descr: "A37 välja saatmine läbi TSO MOL",
+    start: "05.07.2024 13:18",
+    end:   "31.12.2080 10:55",
+    workflow: "RESERVE-mFRR",
+    type: "Sõnum",
+    period: "15M+1",
+    message: "A37_PRIMARY_COPYMOL",
+    formula: `<?
+/**************************************************************
+ * Saadame välja andmed TSO MOLina e. pakkumised BidDocument'il
+ * neile, kes ei kuulu CoBA alasse.
+ * Andmed võetakse Primary MOList.
+ * Käivitab TRIGGER: SENDOUT_TSOMOL
+ *
+ * PS! Sarnane valemile SENDOUT_COPYMOL
+ *
+ * 2024-07-05 RL debugimise lisamine
+ **************************************************************/
+
+$acquiringArea = $METAS['acquiring_area']; // võib tulla RUN_FORMULA sõnumist
+var_dump("aqarea: ", $acquiringArea);
+$outgoingMessage = $METAS["identification"]; // kasutame identificationi välja, et saata õiget outgoingu sõnumit välja
+var_dump("outgoing message: ", $outgoingMessage);
+
+//FIND TSO
+$receiverTSO = getOSCChildren("", $acquiringArea, "AREA", "A04")[0];
+$ReceiverEIC = $receiverTSO['eic_code'];
+$ReceiverROLE = 'A04';
+
+if ($acquiringArea == '10Y1001A1001A94A') {
+    $CoBA = TRUE;
+} else {
+    $CoBA = FALSE;
+}
+
+if ($outgoingMessage === NULL) {
+    $outgoingMessage = "A37_" . $receiverTSO["screen_name"];
+}
+
+if ($METAS['coordinated'] == "SENDOUT_TSOMOL") {
+    unset($METAS['identification']);
+}
+?>`,
+    triggers: [
+      {
+        name: "SENDOUT_TSOMOL",
+        type: "Sõnum",
+        status: "DATA",
+        active: true,
+        onDataChange: true,
+        oncePerInterval: false,
+        oncePerMessage: false,
+        triggerStatus: "Valideeritud",
+        rules: [
+          { key: "message_type", val: "A37", regex: false },
+          { key: "process_type", val: "A46", regex: false }
+        ]
+      },
+      {
+        name: "SENDOUT_TSOMOL_BACKUP",
+        type: "Ajastatud",
+        status: "DATA",
+        active: false,
+        onDataChange: false,
+        oncePerInterval: true,
+        oncePerMessage: false,
+        triggerStatus: "Mitteaktiivne",
+        rules: [
+          { key: "message_type", val: "A37", regex: false }
+        ]
+      }
+    ]
+  },
+
+  "A13_CALC_EEFI_BORDER": {
+    code: "A13_CALC_EEFI_BORDER",
+    descr: "Arvutab FG eri linkide failide baasil Eesti-Soome piiri TTC",
+    start: "12.02.2024 15:03",
+    end: "31.12.2080 00:00",
+    workflow: "RESERVE-mFRR",
+    type: "Andmed",
+    period: "15M+1",
+    message: "A13_FG_BORDER",
+    formula: `<?
+// Arvutab FG linkide failide baasil EE-FI piiri TTC
+$border = getTTC($DATA, 'EEFI');
+return $border;
+?>`,
+    triggers: [
+      {
+        name: "CALC_FG_EEFI",
+        type: "Sõnum",
+        status: "DATA",
+        active: true,
+        onDataChange: true,
+        oncePerInterval: false,
+        oncePerMessage: false,
+        triggerStatus: "Valideeritud",
+        rules: [
+          { key: "message_type", val: "A13", regex: false },
+          { key: "business_type", val: "A25", regex: false },
+          { key: "domain", val: "(10T-FI-EE-00001Q)|(10T-FI-EE-00002O)", regex: true },
+          { key: "sender_identification", val: "10X1001A1001A264", regex: false }
+        ]
+      }
+    ]
+  },
+
+  "B21_BID_IN": {
+    code: "B21_BID_IN",
+    descr: "B21 sõnumi töötlus DATA staatusesse",
+    start: "12.02.2024 15:03",
+    end: "31.12.2080 00:00",
+    workflow: "RESERVE-CALC",
+    type: "Sõnum",
+    period: "1H",
+    message: "B21_BID",
+    formula: `<?
+// Töötleb B21 sõnumi
+$bid = parseB21($DATA);
+return $bid;
+?>`,
+    triggers: [
+      {
+        name: "B21_BID_IN",
+        type: "Sõnum",
+        status: "DATA",
+        active: true,
+        onDataChange: true,
+        oncePerInterval: false,
+        oncePerMessage: true,
+        triggerStatus: "Valideeritud",
+        rules: [
+          { key: "message_type", val: "B21", regex: false },
+          { key: "receiver_identification", val: "10X1001A1001A264", regex: false }
+        ]
+      }
+    ]
+  }
+};
+
+/* List for Formula dropdown in trigger modal */
+const ALL_FORMULA_CODES = [
+  "SENDOUT_TSOMOL",
+  "A13_CALC_EEFI_BORDER",
+  "A13_CALC_EEEL_BORDER",
+  "B21_BID_IN",
+  "TEAVITUS",
+  "A09_AC_DC_SCADA",
+  "aFRR_SETTLEMENT_ENERGY_UNIT_P",
+  "A02_CALC_DEFAULT_ELR",
+  "ESP_BH_A07_CONF_VANA"
+];
+
+/* ============================================================
+   State
+   ============================================================ */
+let state = {
+  mode: "new",        // "new" | "edit" | "newversion"
+  originalCode: null,
+  triggers: [],
+  isDirty: false,
+  editingTrigIdx: null
+};
+
+/* ============================================================
+   Init from URL params
+   ============================================================ */
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const isNewVersion = params.get("new") === "1";
+
+  if (code && FORMULAS[code]) {
+    const f = FORMULAS[code];
+    state.originalCode = code;
+    state.triggers = JSON.parse(JSON.stringify(f.triggers || []));
+
+    if (isNewVersion) {
+      state.mode = "newversion";
+      setTitle("Uus versioon: " + code, "newversion");
+      // Prefill code + descr, leave dates empty
+      document.getElementById("fCode").value = f.code;
+      document.getElementById("fCode").readOnly = true;
+      document.getElementById("fDescr").value = f.descr;
+      document.getElementById("fWorkflow").value = f.workflow !== "—" ? f.workflow : "";
+      document.getElementById("fType").value = f.type;
+      // Start/End left empty for new version
+    } else {
+      state.mode = "edit";
+      setTitle(code, "edit");
+      document.getElementById("fCode").value = f.code;
+      document.getElementById("fCode").readOnly = true;
+      document.getElementById("fDescr").value = f.descr;
+      document.getElementById("fStart").value = f.start;
+      document.getElementById("fEnd").value = f.end;
+      document.getElementById("fWorkflow").value = f.workflow !== "—" ? f.workflow : "";
+      document.getElementById("fType").value = f.type;
+    }
+  } else {
+    // New empty form
+    state.mode = "new";
+    setTitle("Uus valem", "new");
+  }
+
+  updateFooterInfo();
+  renderTriggers();
+
+  // Track dirtiness
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    el.addEventListener("input", markDirty);
+    el.addEventListener("change", markDirty);
+  });
+
+  // Populate formula dropdown in trigger modal
+  const tmF = document.getElementById("tmFormula");
+  tmF.innerHTML = ALL_FORMULA_CODES.map(c =>
+    `<option${c === (state.originalCode||"") ? ' selected' : ''}>${c}</option>`
+  ).join("");
+  tmF.addEventListener("change", () => {
+    const c = tmF.value;
+    const d = FORMULAS[c]?.descr || "Kirjeldust pole saadaval";
+    document.getElementById("tmFormulaDescr").textContent = d;
+  });
+}
+
+function setTitle(title, mode) {
+  document.title = "BHT Elekter — " + title;
+  document.getElementById("crumbCurrent").textContent = title;
+
+  const titleEl = document.getElementById("pageTitle");
+  const badge = document.getElementById("modeBadge");
+  const editorBtn = document.getElementById("openEditorBtn");
+
+  if (mode === "new") {
+    titleEl.textContent = "Uus valem";
+    badge.className = "page-title-badge new";
+    badge.innerHTML = '<svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus';
+    editorBtn.href = "valem-editor.html";
+    editorBtn.innerHTML = '<svg class="icon icon-sm"><use href="#i-code"/></svg>Lisa valemi kood';
+  } else if (mode === "newversion") {
+    titleEl.innerHTML = 'Uus versioon: <span class="title-code">' + escapeHtml(state.originalCode) + '</span>';
+    badge.className = "page-title-badge";
+    badge.innerHTML = '<svg class="icon icon-xs"><use href="#i-plus"/></svg>Uus versioon';
+    editorBtn.href = "valem-editor.html?code=" + encodeURIComponent(state.originalCode);
+    editorBtn.innerHTML = '<svg class="icon icon-sm"><use href="#i-code"/></svg>Muuda valemi koodi';
+  } else {
+    titleEl.innerHTML = 'Muuda valem: <span class="title-code">' + escapeHtml(state.originalCode) + '</span>';
+    badge.className = "page-title-badge";
+    badge.innerHTML = '<svg class="icon icon-xs"><use href="#i-pencil"/></svg>Muutmine';
+    editorBtn.href = "valem-editor.html?code=" + encodeURIComponent(state.originalCode);
+    editorBtn.innerHTML = '<svg class="icon icon-sm"><use href="#i-code"/></svg>Muuda valemi koodi';
+  }
+}
+
+function markDirty() {
+  if (!state.isDirty) {
+    state.isDirty = true;
+    updateFooterInfo();
+  }
+}
+
+function updateFooterInfo() {
+  const el = document.getElementById("footerInfo");
+  if (state.isDirty) {
+    el.innerHTML = '<svg class="icon icon-xs"><use href="#i-alert"/></svg>Muudatused salvestamata';
+  } else if (state.mode === "edit") {
+    el.innerHTML = '<svg class="icon icon-xs" style="color:var(--green-500)"><use href="#i-check"/></svg>Kõik muudatused salvestatud';
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+/* ============================================================
+   Render triggers table
+   ============================================================ */
+function boolCell(v) {
+  return v
+    ? `<span class="bool-yes" title="Jah">+</span>`
+    : `<span class="bool-no"  title="Ei">−</span>`;
+}
+
+function renderTriggers() {
+  const wrap = document.getElementById("trigTableWrap");
+  const cntEl = document.getElementById("trigCount");
+  cntEl.textContent = state.triggers.length;
+  cntEl.className = "count" + (state.triggers.length === 0 ? " zero" : "");
+
+  if (state.triggers.length === 0) {
+    wrap.innerHTML = `
+      <div class="empty-triggers">
+        <svg class="icon"><use href="#i-bolt"/></svg>
+        <div>Sellel valemil pole veel triggereid.</div>
+        <div style="font-size:12px;margin-top:2px">Trigger kirjeldab, milliste sõnumite saabumisel valem käivitub.</div>
+        <div class="empty-triggers-action">
+          <button class="btn btn-primary btn-sm" onclick="openTrigger(null)">
+            <svg class="icon icon-sm"><use href="#i-plus"/></svg>Lisa esimene trigger
+          </button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <table class="trig-table">
+      <colgroup>
+        <col style="width:auto">
+        <col style="width:100px">
+        <col style="width:80px">
+        <col style="width:120px">
+        <col style="width:80px">
+        <col style="width:85px">
+        <col style="width:90px">
+        <col style="width:80px">
+        <col style="width:220px">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Nimi</th>
+          <th>Tüüp</th>
+          <th class="center">Reeglid</th>
+          <th>Staatus</th>
+          <th class="center" title="On Data Change">On&nbsp;Data Change</th>
+          <th class="center" title="Once Per Interval">Once Per Interval</th>
+          <th class="center" title="Once Per Message">Once Per Message</th>
+          <th class="center">Aktiivne</th>
+          <th style="text-align:right">Tegevused</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${state.triggers.map((t, i) => `
+          <tr>
+            <td>
+              <span class="trig-name" onclick="openTrigger(${i})">${escapeHtml(t.name)}</span>
+            </td>
+            <td>${escapeHtml(t.type)}</td>
+            <td class="center" style="font-family:var(--mono);font-weight:600">${(t.rules||[]).length}</td>
+            <td><span class="pill ${t.active ? 'pill-active' : 'pill-inactive'}">${escapeHtml(t.triggerStatus || (t.active ? 'Aktiivne' : 'Mitteaktiivne'))}</span></td>
+            <td class="center">${boolCell(t.onDataChange)}</td>
+            <td class="center">${boolCell(t.oncePerInterval)}</td>
+            <td class="center">${boolCell(t.oncePerMessage)}</td>
+            <td class="center">${boolCell(t.active)}</td>
+            <td>
+              <div class="row-actions">
+                <button class="log-btn" onclick="toast('Logi vaade: ${escapeHtml(t.name)}', 'info')">
+                  <svg class="icon icon-sm"><use href="#i-list"/></svg>Logi
+                </button>
+                <button class="icon-btn" title="Muuda" onclick="openTrigger(${i})">
+                  <svg class="icon"><use href="#i-pencil"/></svg>
+                </button>
+                <button class="icon-btn" title="Laadi alla" onclick="toast('Allalaadimine: ${escapeHtml(t.name)}', 'info')">
+                  <svg class="icon"><use href="#i-download"/></svg>
+                </button>
+                <button class="icon-btn danger" title="Kustuta" onclick="deleteTrigger(${i})">
+                  <svg class="icon"><use href="#i-trash"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>`;
+}
+
+function deleteTrigger(i) {
+  const t = state.triggers[i];
+  if (confirm(`Kas kustutada trigger "${t.name}"?`)) {
+    state.triggers.splice(i, 1);
+    markDirty();
+    renderTriggers();
+    toast(`Trigger "${t.name}" kustutatud`, "success");
+  }
+}
+
+/* ============================================================
+   Trigger modal
+   ============================================================ */
+let modalRules = [];
+
+function openTrigger(idx) {
+  state.editingTrigIdx = idx;
+  document.getElementById("trigModalTitle").textContent = idx === null ? "Lisa trigger" : "Muuda trigger";
+
+  const t = idx === null ? {
+    name: "", type: "Sõnum", status: "DATA",
+    active: true, onDataChange: false, oncePerInterval: false, oncePerMessage: false,
+    rules: [{ key: "", val: "", regex: false }]
+  } : JSON.parse(JSON.stringify(state.triggers[idx]));
+
+  document.getElementById("tmName").value = t.name;
+  document.getElementById("tmFormula").value = state.originalCode || ALL_FORMULA_CODES[0];
+  document.getElementById("tmFormula").dispatchEvent(new Event("change"));
+  document.getElementById("tmStatus").value = t.status || "DATA";
+  document.getElementById("tmType").value = t.type || "Sõnum";
+  document.getElementById("tmOnDataChange").checked    = !!t.onDataChange;
+  document.getElementById("tmOncePerInterval").checked = !!t.oncePerInterval;
+  document.getElementById("tmOncePerMessage").checked  = !!t.oncePerMessage;
+  document.getElementById("tmActive").checked          = !!t.active;
+
+  modalRules = t.rules && t.rules.length > 0
+    ? JSON.parse(JSON.stringify(t.rules))
+    : [{ key: "", val: "", regex: false }];
+  renderRules();
+
+  document.getElementById("trigModal").classList.add("show");
+  setTimeout(() => document.getElementById("tmName").focus(), 50);
+}
+
+function closeTrigger() {
+  document.getElementById("trigModal").classList.remove("show");
+  state.editingTrigIdx = null;
+}
+
+function addRule() {
+  modalRules.push({ key: "", val: "", regex: false });
+  renderRules();
+  // focus last added
+  setTimeout(() => {
+    const inputs = document.querySelectorAll("#rulesBody .rule-input");
+    if (inputs.length > 0) inputs[inputs.length - 2]?.focus();
+  }, 10);
+}
+
+function renderRules() {
+  const tbody = document.getElementById("rulesBody");
+  tbody.innerHTML = modalRules.map((r, i) => `
+    <tr>
+      <td><input type="text" class="rule-input" value="${escapeHtml(r.key)}" placeholder="nt. message_type" oninput="modalRules[${i}].key=this.value" list="metakey-list"></td>
+      <td><input type="text" class="rule-input" value="${escapeHtml(r.val)}" placeholder="nt. A13" oninput="modalRules[${i}].val=this.value"></td>
+      <td class="center"><input type="checkbox" class="rule-checkbox" ${r.regex?'checked':''} onchange="modalRules[${i}].regex=this.checked"></td>
+      <td class="center">
+        <button class="icon-btn danger" title="Kustuta" onclick="removeRule(${i})">
+          <svg class="icon"><use href="#i-trash"/></svg>
+        </button>
+      </td>
+    </tr>
+  `).join("");
+  // Add datalist for metakey autocomplete
+  if (!document.getElementById("metakey-list")) {
+    const dl = document.createElement("datalist");
+    dl.id = "metakey-list";
+    dl.innerHTML = `
+      <option value="message_type">
+      <option value="business_type">
+      <option value="domain">
+      <option value="sender_identification">
+      <option value="receiver_identification">
+      <option value="process_type">
+      <option value="acquiring_area">
+    `;
+    document.body.appendChild(dl);
+  }
+}
+
+function removeRule(i) {
+  modalRules.splice(i, 1);
+  if (modalRules.length === 0) modalRules.push({ key: "", val: "", regex: false });
+  renderRules();
+}
+
+function saveTrigger(keepOpen) {
+  const name = document.getElementById("tmName").value.trim();
+  if (!name) { toast("Trigger nimi on kohustuslik", "error"); return; }
+
+  const validRules = modalRules.filter(r => r.key.trim() && r.val.trim());
+  if (validRules.length === 0) {
+    toast("Lisa vähemalt üks reegel", "error");
+    return;
+  }
+
+  const t = {
+    name,
+    type: document.getElementById("tmType").value,
+    status: document.getElementById("tmStatus").value,
+    onDataChange:    document.getElementById("tmOnDataChange").checked,
+    oncePerInterval: document.getElementById("tmOncePerInterval").checked,
+    oncePerMessage:  document.getElementById("tmOncePerMessage").checked,
+    active:          document.getElementById("tmActive").checked,
+    triggerStatus:   document.getElementById("tmActive").checked ? "Valideeritud" : "Mitteaktiivne",
+    rules: validRules
+  };
+
+  if (state.editingTrigIdx === null) {
+    state.triggers.push(t);
+    toast(`Trigger "${t.name}" lisatud`, "success");
+  } else {
+    state.triggers[state.editingTrigIdx] = t;
+    toast(`Trigger "${t.name}" uuendatud`, "success");
+  }
+
+  markDirty();
+  renderTriggers();
+
+  if (keepOpen) {
+    state.editingTrigIdx = null;
+    openTrigger(null);
+  } else {
+    closeTrigger();
+  }
+}
+
+/* ============================================================
+   Save / Cancel
+   ============================================================ */
+function saveForm(keepOpen) {
+  const code = document.getElementById("fCode").value.trim();
+  const start = document.getElementById("fStart").value.trim();
+  const end = document.getElementById("fEnd").value.trim();
+
+  let ok = true;
+  if (!code) {
+    document.getElementById("fCode").classList.add("error");
+    document.getElementById("fCodeError").style.display = "block";
+    ok = false;
+  } else {
+    document.getElementById("fCode").classList.remove("error");
+    document.getElementById("fCodeError").style.display = "none";
+  }
+  if (!start) { document.getElementById("fStart").classList.add("error"); ok = false; }
+  else document.getElementById("fStart").classList.remove("error");
+  if (!end) { document.getElementById("fEnd").classList.add("error"); ok = false; }
+  else document.getElementById("fEnd").classList.remove("error");
+
+  if (!ok) {
+    toast("Kontrolli kohustuslikud väljad", "error");
+    return;
+  }
+
+  state.isDirty = false;
+  updateFooterInfo();
+
+  if (keepOpen) {
+    toast(`Salvestatud — ${state.triggers.length} trigger${state.triggers.length===1?'':'it'}`, "success");
+  } else {
+    toast("Salvestatud, tagasi valemite nimekirja…", "success");
+    setTimeout(() => { window.location.href = "valemid.html"; }, 900);
+  }
+}
+
+function cancelForm() {
+  if (state.isDirty) {
+    if (!confirm("Salvestamata muudatused lähevad kaotsi. Kas kindlasti tühistada?")) return;
+  }
+  window.location.href = "valemid.html";
+}
+
+/* ============================================================
+   Utils
+   ============================================================ */
+function escapeHtml(s){ return String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
+
+let toastTimer;
+function toast(msg, kind) {
+  const t = document.getElementById("toast");
+  t.className = "toast show" + (kind === "success" ? " success" : kind === "error" ? " error" : "");
+  document.getElementById("toastText").textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+// Escape key closes modal
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && document.getElementById("trigModal").classList.contains("show")) {
+    closeTrigger();
+  }
+});
+
+// Click outside modal closes it
+document.getElementById("trigModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("trigModal")) closeTrigger();
+});
+
+// Warn on unload if dirty
+window.addEventListener("beforeunload", (e) => {
+  if (state.isDirty) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+init();
+</script>
+
+</body>
+</html>
