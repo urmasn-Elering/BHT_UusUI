@@ -345,8 +345,8 @@
 
   .code-cell { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--ink-900); }
   a.code-cell:hover { color: var(--teal-700); text-decoration: underline; text-underline-offset: 3px; }
-  a.btn, a.add-formula-btn, a.icon-btn { text-decoration: none; }
-  a.btn:hover, a.add-formula-btn:hover, a.icon-btn:hover { text-decoration: none; }
+  a.btn, a.icon-btn { text-decoration: none; }
+  a.btn:hover, a.icon-btn:hover { text-decoration: none; }
   .code-wrap { display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
 
   .chip {
@@ -439,13 +439,6 @@
     display: inline-flex; align-items: center; gap: 4px;
   }
   .log-btn:hover { background: var(--teal-800); }
-  .add-formula-btn {
-    height: 26px; padding: 0 10px; border-radius: var(--radius);
-    background: #fff; color: var(--teal-700); border: 1px solid var(--teal-700);
-    font-size: 11.5px; font-weight: 500;
-    display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
-  }
-  .add-formula-btn:hover { background: var(--teal-050); }
 
   /* Footer */
   .table-footer {
@@ -996,7 +989,6 @@ function renderTable(rows, q) {
       <td class="trig-cell">${trigCellHtml}</td>
       <td>
         <div class="row-actions">
-          <a class="add-formula-btn" href="valem-detail.html?code=${encodeURIComponent(f.code)}&new=1"><svg class="icon icon-sm"><use href="#i-plus"/></svg>Lisa valem</a>
           <button class="log-btn" onclick="toast('Logi vaade: ${f.code}')"><svg class="icon icon-sm"><use href="#i-list"/></svg>Logi</button>
           <a class="icon-btn" title="Muuda" href="valem-detail.html?code=${encodeURIComponent(f.code)}"><svg class="icon"><use href="#i-pencil"/></svg></a>
           <button class="icon-btn danger" title="Kustuta" onclick="toast('Kustuta: ${f.code}')"><svg class="icon"><use href="#i-trash"/></svg></button>
