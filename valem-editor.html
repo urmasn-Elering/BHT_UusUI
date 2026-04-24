@@ -100,15 +100,70 @@
     height: calc(100vh - 48px);
   }
 
-  /* ========= SUBHEADER (title + meta + actions) ========= */
+  /* ========= SUBHEADER (title + meta + actions + dates) ========= */
   .subheader {
     flex: 0 0 auto;
     background: #fff;
     border-bottom: 1px solid var(--line);
+  }
+  .subheader-top {
     padding: 10px 20px;
     display: flex; align-items: center; gap: 18px;
     flex-wrap: wrap;
   }
+  .subheader-dates {
+    padding: 8px 20px;
+    background: var(--bg-zebra);
+    border-top: 1px solid var(--line-soft);
+    display: flex; align-items: center; gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+  }
+  .sd-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-700);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .sd-field {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sd-field label {
+    font-size: 12px;
+    color: var(--ink-700);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .sd-field label .req { color: var(--red-500); margin-left: 2px; }
+  .sd-input-wrap {
+    position: relative;
+  }
+  .sd-input {
+    height: 28px;
+    width: 170px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 30px 0 10px;
+    font-size: 12.5px;
+    font-family: inherit;
+    background: #fff;
+    color: var(--ink-900);
+  }
+  .sd-input:focus { outline: none; border-color: var(--teal-700); box-shadow: var(--focus); }
+  .sd-input.error { border-color: var(--red-500); }
+  .sd-icon {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    color: var(--ink-400); pointer-events: none;
+  }
+  .sd-hint {
+    margin-left: auto;
+    font-size: 11.5px;
+    color: var(--ink-500);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .sd-hint .icon { color: var(--amber-500); }
+  .sd-hint.hidden { display: none; }
   .back-link {
     display: inline-flex; align-items: center; gap: 4px;
     color: var(--ink-500);
@@ -199,6 +254,43 @@
   }
   .tb-select:focus { outline: none; border-color: var(--teal-700); box-shadow: var(--focus); }
   .tb-sep { width: 1px; height: 20px; background: var(--line); }
+
+  .uploaded-file {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px; padding: 0 4px 0 10px;
+    background: var(--green-050);
+    border: 1px solid var(--green-100);
+    color: var(--green-600);
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-family: var(--mono);
+    max-width: 280px;
+  }
+  .uploaded-file > span:nth-of-type(1) {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    max-width: 160px;
+  }
+  .uploaded-file .meta {
+    color: var(--green-500);
+    font-size: 10.5px;
+    padding-left: 4px;
+    border-left: 1px solid var(--green-100);
+    margin-left: 2px;
+  }
+  .uploaded-file .remove {
+    background: transparent; border: 0;
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--green-600);
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 2px;
+  }
+  .uploaded-file .remove:hover {
+    background: #c8ecd3;
+    color: var(--red-500);
+  }
   .tb-btn {
     height: 28px; padding: 0 10px; border-radius: var(--radius);
     border: 1px solid var(--line);
@@ -474,6 +566,8 @@
     <symbol id="i-code" viewBox="0 0 24 24"><path d="M7 8l-4 4l4 4M17 8l4 4l-4 4M14 4l-4 16"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6 -6"/></symbol>
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 9l5 -5l5 5"/><path d="M12 4v12"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></symbol>
     <symbol id="i-history" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/></symbol>
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></symbol>
     <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.871l-8.106 -13.534a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></symbol>
@@ -509,22 +603,43 @@
 
   <!-- Subheader -->
   <div class="subheader">
-    <a class="back-link" href="#" id="backLink">
-      <svg class="icon icon-sm"><use href="#i-chevron-left"/></svg>
-      Tagasi valemi juurde
-    </a>
+    <div class="subheader-top">
+      <a class="back-link" href="#" id="backLink">
+        <svg class="icon icon-sm"><use href="#i-chevron-left"/></svg>
+        Tagasi valemi juurde
+      </a>
 
-    <h1 class="editor-title" id="editorTitle">
-      <svg class="icon" style="color:var(--teal-700)"><use href="#i-code"/></svg>
-      Valemi redaktor
-    </h1>
+      <h1 class="editor-title" id="editorTitle">
+        <svg class="icon" style="color:var(--teal-700)"><use href="#i-code"/></svg>
+        Valemi redaktor
+      </h1>
 
-    <div class="editor-meta" id="editorMeta"></div>
+      <div class="editor-meta" id="editorMeta"></div>
 
-    <div class="header-actions">
-      <button class="btn btn-ghost" onclick="cancelEdit()">Tühista</button>
-      <button class="btn btn-secondary" onclick="save(true)">Salvesta</button>
-      <button class="btn btn-primary" onclick="save(false)">Salvesta ja sulge</button>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="cancelEdit()">Tühista</button>
+        <button class="btn btn-secondary" onclick="save(true)">Salvesta</button>
+        <button class="btn btn-primary" onclick="save(false)">Salvesta ja sulge</button>
+      </div>
+    </div>
+
+    <div class="subheader-dates">
+      <div class="sd-label">Versiooni kehtivus:</div>
+      <div class="sd-field">
+        <label for="verStart">Algus (EET) <span class="req">*</span></label>
+        <div class="sd-input-wrap">
+          <input id="verStart" type="text" class="sd-input" placeholder="pp.kk.aaaa hh:mm" autocomplete="off">
+          <svg class="icon icon-sm sd-icon"><use href="#i-calendar"/></svg>
+        </div>
+      </div>
+      <div class="sd-field">
+        <label for="verEnd">Lõpp (EET) <span class="req">*</span></label>
+        <div class="sd-input-wrap">
+          <input id="verEnd" type="text" class="sd-input" placeholder="pp.kk.aaaa hh:mm" autocomplete="off">
+          <svg class="icon icon-sm sd-icon"><use href="#i-calendar"/></svg>
+        </div>
+      </div>
+      <div class="sd-hint" id="sdHint"></div>
     </div>
   </div>
 
@@ -549,6 +664,22 @@
         <option>A01_SCHEDULE</option>
         <option>B21_BID</option>
       </select>
+
+      <span style="color:var(--ink-400);font-size:11px">või</span>
+
+      <label for="msgFileInput" class="tb-btn" style="cursor:pointer" title="Laadi üles oma test-sõnum (XML, JSON, TXT)">
+        <svg class="icon icon-sm"><use href="#i-upload"/></svg>Lae fail üles
+      </label>
+      <input id="msgFileInput" type="file" accept=".xml,.json,.txt,.csv" style="display:none" onchange="handleFileUpload(this)">
+
+      <span id="uploadedFile" class="uploaded-file" style="display:none">
+        <svg class="icon icon-xs"><use href="#i-check"/></svg>
+        <span id="uploadedFileName"></span>
+        <span id="uploadedFileSize" class="meta"></span>
+        <button class="remove" onclick="clearUpload()" title="Eemalda">
+          <svg class="icon icon-xs"><use href="#i-x"/></svg>
+        </button>
+      </span>
     </div>
 
     <span class="tb-sep"></span>
@@ -688,6 +819,8 @@ const FORMULAS = {
     message: "A37_PRIMARY_COPYMOL",
     updatedAt: "12.02.2024 15:03",
     updatedBy: "Mari Maasikas",
+    activeStart: "05.07.2024 13:18",
+    activeEnd:   "31.12.2080 10:55",
     formula: `<?
 /**************************************************************
  * Saadame välja andmed TSO MOLina e. pakkumised BidDocument'il
@@ -734,6 +867,8 @@ if ($METAS['coordinated'] == "SENDOUT_TSOMOL") {
     message: "A13_FG_BORDER",
     updatedAt: "12.02.2024 15:03",
     updatedBy: "Urmas Nurme",
+    activeStart: "12.02.2024 15:03",
+    activeEnd:   "31.12.2080 00:00",
     formula: `<?
 // Arvutab FG linkide failide baasil EE-FI piiri TTC
 $border = getTTC($DATA, 'EEFI');
@@ -749,6 +884,8 @@ return $border;
     message: "B21_BID",
     updatedAt: "12.02.2024 15:03",
     updatedBy: "Mari Maasikas",
+    activeStart: "12.02.2024 15:03",
+    activeEnd:   "31.12.2080 00:00",
     formula: `<?
 // Töötleb B21 sõnumi
 $bid = parseB21($DATA);
@@ -765,7 +902,8 @@ let state = {
   originalCode: null,
   backUrl: "valemid.html",
   isDirty: false,
-  savedValue: ""
+  savedValue: "",
+  uploadedFile: null   // { name, size, type, content }
 };
 
 /* ============================================================
@@ -859,6 +997,7 @@ function init() {
   updateGutter();
   updateStatusbar();
   updateSavedStatus();
+  setupVersionDates(formulaData);
   // For new-version mode we want "dirty" signalled immediately so user knows they'll create a new version on save
   if (state.mode === "newversion") {
     state.isDirty = true;
@@ -889,6 +1028,128 @@ function init() {
   if (state.mode === "new") {
     setTimeout(() => editorInput.focus(), 100);
   }
+}
+
+/* ============================================================
+   Version date fields (start / end)
+   ============================================================ */
+function setupVersionDates(formulaData) {
+  const startEl = document.getElementById("verStart");
+  const endEl   = document.getElementById("verEnd");
+  const hintEl  = document.getElementById("sdHint");
+
+  if (state.mode === "new") {
+    // New formula — user defines when first version starts
+    startEl.value = "";
+    endEl.value = "";
+    hintEl.innerHTML = '<svg class="icon icon-xs"><use href="#i-info"/></svg><span>Määra esimese versiooni kehtivusperiood</span>';
+  }
+  else if (state.mode === "newversion") {
+    // New version — start defaults to "now", end to far future.
+    // Previous active version will auto-end when this one starts.
+    startEl.value = formatNow();
+    endEl.value = "31.12.2080 00:00";
+    hintEl.innerHTML = '<svg class="icon icon-xs" style="color:var(--amber-500)"><use href="#i-alert"/></svg><span>Eelmine aktiivne versioon (' + escapeHtml(formulaData.activeStart) + '…) lõpetatakse automaatselt, kui see versioon salvestatakse</span>';
+  }
+  else if (state.mode === "version") {
+    // Viewing a historical version — dates are read-only
+    startEl.value = formulaData.activeStart || "";
+    endEl.value = formulaData.activeEnd || "";
+    startEl.readOnly = true;
+    endEl.readOnly = true;
+    hintEl.innerHTML = '<svg class="icon icon-xs" style="color:var(--amber-500)"><use href="#i-alert"/></svg><span>Varasema versiooni kuupäevi ei saa muuta</span>';
+  }
+  else {
+    // Edit active version
+    startEl.value = formulaData.activeStart || "";
+    endEl.value = formulaData.activeEnd || "";
+    hintEl.innerHTML = '<svg class="icon icon-xs"><use href="#i-info"/></svg><span>Aktiivse versiooni kehtivusperiood</span>';
+  }
+
+  // Track changes
+  [startEl, endEl].forEach(el => {
+    el.addEventListener("input", () => {
+      markDirty();
+      validateDates();
+    });
+  });
+}
+
+function formatNow() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function validateDates() {
+  const startEl = document.getElementById("verStart");
+  const endEl   = document.getElementById("verEnd");
+  // Simple: both must be filled if editing or new; if readOnly skip
+  if (startEl.readOnly) return true;
+  let ok = true;
+  if (!startEl.value.trim()) { startEl.classList.add("error"); ok = false; }
+  else startEl.classList.remove("error");
+  if (!endEl.value.trim()) { endEl.classList.add("error"); ok = false; }
+  else endEl.classList.remove("error");
+  return ok;
+}
+
+/* ============================================================
+   File upload (test message)
+   ============================================================ */
+function handleFileUpload(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+
+  // Size limit: 2 MB
+  const MAX_SIZE = 2 * 1024 * 1024;
+  if (file.size > MAX_SIZE) {
+    toast("Fail on liiga suur (max 2 MB)", "error");
+    input.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    state.uploadedFile = {
+      name: file.name,
+      size: file.size,
+      type: file.type || guessType(file.name),
+      content: e.target.result
+    };
+
+    // Clear the dropdown selection since user chose a file
+    document.getElementById("tbMessage").value = "";
+
+    // Show chip
+    document.getElementById("uploadedFileName").textContent = file.name;
+    document.getElementById("uploadedFileSize").textContent = formatBytes(file.size);
+    document.getElementById("uploadedFile").style.display = "inline-flex";
+
+    toast(`"${file.name}" laaditud — kasuta seda Valideerimisel`, "success");
+  };
+  reader.onerror = () => {
+    toast("Faili lugemine ebaõnnestus", "error");
+    input.value = "";
+  };
+  reader.readAsText(file);
+}
+
+function clearUpload() {
+  state.uploadedFile = null;
+  document.getElementById("uploadedFile").style.display = "none";
+  document.getElementById("msgFileInput").value = "";
+}
+
+function guessType(name) {
+  const ext = name.toLowerCase().split(".").pop();
+  return { xml: "application/xml", json: "application/json", csv: "text/csv", txt: "text/plain" }[ext] || "text/plain";
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / 1024 / 1024).toFixed(1) + " MB";
 }
 
 function syncDisplayScroll() {
@@ -1236,7 +1497,15 @@ function validateFormula() {
   }
 
   // Success — mock result
-  const msg = document.getElementById("tbMessage").value || "(pole valitud)";
+  let msgLabel, sourceLabel;
+  if (state.uploadedFile) {
+    msgLabel = state.uploadedFile.name;
+    sourceLabel = `Üleslaaditud fail (${formatBytes(state.uploadedFile.size)}, ${state.uploadedFile.type})`;
+  } else {
+    msgLabel = document.getElementById("tbMessage").value || "(pole valitud)";
+    sourceLabel = document.getElementById("tbMessage").value ? "Test-sõnumite kataloogist" : "—";
+  }
+
   title.innerHTML = '<svg class="icon icon-sm" style="color:var(--green-500)"><use href="#i-check"/></svg>Valideerimine õnnestus';
   body.innerHTML = `
     <div class="result-item">
@@ -1249,8 +1518,15 @@ function validateFormula() {
     </div>
     <div class="result-item">
       <span class="r-label">Test-sõnum:</span>
-      <span class="r-value">${escapeHtml(msg)}</span>
+      <span class="r-value">${escapeHtml(msgLabel)} <span style="color:var(--ink-500);font-size:11px;margin-left:6px">· ${escapeHtml(sourceLabel)}</span></span>
     </div>
+    ${state.uploadedFile ? `
+    <div class="result-item">
+      <span class="r-label">Sisend:</span>
+      <span class="r-value" style="flex-direction:column;display:flex">
+        <pre>${escapeHtml(state.uploadedFile.content.slice(0, 500))}${state.uploadedFile.content.length > 500 ? '\n... (' + (state.uploadedFile.content.length - 500) + ' lisamärki peidetud)' : ''}</pre>
+      </span>
+    </div>` : ''}
     <div class="result-item">
       <span class="r-label">Väljund:</span>
       <span class="r-value" style="flex-direction:column;display:flex">
@@ -1281,6 +1557,10 @@ function closeValidation() {
    Save / Cancel / Download
    ============================================================ */
 function save(staySame) {
+  if (!validateDates()) {
+    toast("Kontrolli versiooni kehtivusperiood", "error");
+    return;
+  }
   state.savedValue = document.getElementById("edInput").value;
   state.isDirty = false;
   updateSavedStatus();
