@@ -1506,7 +1506,6 @@ function renderTriggers() {
         <col style="width:auto">
         <col style="width:100px">
         <col style="width:80px">
-        <col style="width:120px">
         <col style="width:80px">
         <col style="width:85px">
         <col style="width:90px">
@@ -1518,7 +1517,6 @@ function renderTriggers() {
           <th>Nimi</th>
           <th>Tüüp</th>
           <th class="center">Reeglid</th>
-          <th>Staatus</th>
           <th class="center" title="On Data Change">On&nbsp;Data Change</th>
           <th class="center" title="Once Per Interval">Once Per Interval</th>
           <th class="center" title="Once Per Message">Once Per Message</th>
@@ -1534,7 +1532,6 @@ function renderTriggers() {
             </td>
             <td>${escapeHtml(t.type)}</td>
             <td class="center" style="font-family:var(--mono);font-weight:600">${(t.rules||[]).length}</td>
-            <td><span class="pill ${t.active ? 'pill-active' : 'pill-inactive'}">${escapeHtml(t.triggerStatus || (t.active ? 'Aktiivne' : 'Mitteaktiivne'))}</span></td>
             <td class="center">${boolCell(t.onDataChange)}</td>
             <td class="center">${boolCell(t.oncePerInterval)}</td>
             <td class="center">${boolCell(t.oncePerMessage)}</td>
